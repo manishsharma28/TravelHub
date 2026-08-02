@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import type { PackageQuery } from '@travelhub/shared';
-import { queryPackages, buildFacets, findPackage } from '../lib/query.js';
-import { packages, destinations, testimonials } from '../data/packages.js';
+import { repository } from '../repositories/index.js';
+import { asyncRoute } from '../lib/asyncRoute.js';
 
 export const packagesRouter: Router = Router();
 
@@ -59,46 +59,61 @@ const querySchema = z.object({
   pageSize: z.coerce.number().int().positive().max(48).optional(),
 });
 
-packagesRouter.get('/packages', (req, res) => {
-  const parsed = querySchema.safeParse(req.query);
-  if (!parsed.success) {
-    return res.status(400).json({
-      error: 'Invalid query parameters',
-      details: parsed.error.flatten().fieldErrors as Record<string, string>,
-    });
-  }
-  return res.json(queryPackages(parsed.data as PackageQuery));
-});
+packagesRouter.get(
+  '/packages',
+  asyncRoute(async (req, res) => {
+    const parsed = querySchema.safeParse(req.query);
+    if (!parsed.success) {
+      return res.status(400).json({
+        error: 'Invalid query parameters',
+        details: parsed.error.flatten().fieldErrors as Record<string, string>,
+      });
+    }
+    return res.json(await repository.list(parsed.data as PackageQuery));
+  }),
+);
 
-packagesRouter.get('/packages/facets', (req, res) => {
-  const parsed = querySchema.safeParse(req.query);
-  if (!parsed.success) {
-    return res.status(400).json({ error: 'Invalid query parameters' });
-  }
-  return res.json(buildFacets(parsed.data as PackageQuery));
-});
+packagesRouter.get(
+  '/packages/facets',
+  asyncRoute(async (req, res) => {
+    const parsed = querySchema.safeParse(req.query);
+    if (!parsed.success) {
+      return res.status(400).json({ error: 'Invalid query parameters' });
+    }
+    return res.json(await repository.facets(parsed.data as PackageQuery));
+  }),
+);
 
-packagesRouter.get('/packages/featured', (_req, res) => {
-  res.json(packages.filter((p) => p.featured));
-});
+packagesRouter.get(
+  '/packages/featured',
+  asyncRoute(async (_req, res) => {
+    res.json(await repository.featured());
+  }),
+);
 
 // Declared after the literal sub-paths so "/packages/featured" is not
 // swallowed by this wildcard.
-packagesRouter.get('/packages/:idOrSlug', (req, res) => {
-  const pkg = findPackage(req.params.idOrSlug);
-  if (!pkg) return res.status(404).json({ error: 'Package not found' });
+packagesRouter.get(
+  '/packages/:idOrSlug',
+  asyncRoute(async (req, res) => {
+    const pkg = await repository.findByIdOrSlug(req.params.idOrSlug ?? '');
+    if (!pkg) return res.status(404).json({ error: 'Package not found' });
 
-  const related = packages
-    .filter((p) => p.id !== pkg.id && (p.destination === pkg.destination || p.themes.some((t) => pkg.themes.includes(t))))
-    .slice(0, 3);
+    const related = await repository.related(pkg);
+    return res.json({ ...pkg, related });
+  }),
+);
 
-  return res.json({ ...pkg, related });
-});
+packagesRouter.get(
+  '/destinations',
+  asyncRoute(async (_req, res) => {
+    res.json(await repository.destinations());
+  }),
+);
 
-packagesRouter.get('/destinations', (_req, res) => {
-  res.json(destinations);
-});
-
-packagesRouter.get('/testimonials', (_req, res) => {
-  res.json(testimonials);
-});
+packagesRouter.get(
+  '/testimonials',
+  asyncRoute(async (_req, res) => {
+    res.json(await repository.testimonials());
+  }),
+);
