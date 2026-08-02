@@ -12,6 +12,8 @@ backend:
         # and its Function URL) and writes amplify_outputs.json for the client.
         # npm ci fails on this Amplify Gen 2 + workspaces tree (lockfile/peer skew).
         - npm install --cache .npm --prefer-offline
+        # shared/dist is gitignored; backend imports @travelhub/shared types from it.
+        - npm run build -w shared
         - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
 frontend:
   phases:
@@ -20,6 +22,7 @@ frontend:
         - npm install --cache .npm --prefer-offline
     build:
       commands:
+        # build:web already compiles shared, then the Vite frontend
         - npm run build:web
   artifacts:
     baseDirectory: frontend/dist
