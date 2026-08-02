@@ -9,7 +9,7 @@ export const img = (id: string, w = 1200) =>
 export const PHOTO = {
   manali: 'photo-1626621341517-bbf3d9990a23',
   shimla: 'photo-1597074866923-dc0589150358',
-  spiti: 'photo-1590689080414-4b6ff8e2b6e6',
+  spiti: 'photo-1454496522488-7a8e488e8606',
   dharamshala: 'photo-1518002171953-a080ee817e1f',
   kasol: 'photo-1571536802807-30451e3955d8',
   dalhousie: 'photo-1544735716-392fe2489ffa',
