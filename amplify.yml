@@ -8,8 +8,10 @@ backend:
   phases:
     build:
       commands:
-        # Deploys everything defined in amplify/backend.ts (the Express Lambda
-        # and its Function URL) and writes amplify_outputs.json for the client.
+        # Node 22's native type-stripping breaks ampx CDK assembly (.js imports of .ts).
+        - nvm install 20
+        - nvm use 20
+        - node -v
         # npm ci fails on this Amplify Gen 2 + workspaces tree (lockfile/peer skew).
         - npm install --cache .npm --prefer-offline
         # shared/dist is gitignored; backend imports @travelhub/shared types from it.
@@ -19,6 +21,8 @@ frontend:
   phases:
     preBuild:
       commands:
+        - nvm install 20
+        - nvm use 20
         - npm install --cache .npm --prefer-offline
     build:
       commands:
@@ -30,5 +34,5 @@ frontend:
       - '**/*'
   cache:
     paths:
+      # Do not cache node_modules — stale trees cause Amplify module-resolution failures.
       - .npm/**/*
-      - node_modules/**/*

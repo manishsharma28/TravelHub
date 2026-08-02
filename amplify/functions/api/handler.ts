@@ -5,4 +5,4 @@
  * source directly pulls the Express app (and its deps) into the artifact —
  * there is no separate build step for the function.
  */
-export { handler } from '../../../backend/src/lambda.js';
+export { handler } from '../../../backend/src/lambda';

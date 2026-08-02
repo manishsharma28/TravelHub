@@ -1,6 +1,6 @@
 import { defineBackend } from '@aws-amplify/backend';
 import { FunctionUrlAuthType, HttpMethod } from 'aws-cdk-lib/aws-lambda';
-import { api } from './functions/api/resource.js';
+import { api } from './functions/api/resource';
 
 /**
  * Amplify Gen 2 backend definition.

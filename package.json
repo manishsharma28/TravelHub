@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "description": "TravelHub - travel packages marketplace",
+  "type": "module",
   "workspaces": [
     "shared",
     "frontend",
