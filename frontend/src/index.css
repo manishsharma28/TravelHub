@@ -1,0 +1,62 @@
+@import 'tailwindcss';
+
+/* Design tokens — a deep teal/pine primary reads as "mountain travel"
+   without the generic SaaS blue, warmed with an amber accent for pricing
+   and CTAs. Exposed as Tailwind v4 theme vars so utilities like
+   `bg-brand-600` and `text-accent-500` are generated automatically. */
+@theme {
+  --color-brand-50: #eefbf6;
+  --color-brand-100: #d5f5e8;
+  --color-brand-200: #aeead5;
+  --color-brand-300: #79d8bb;
+  --color-brand-400: #43be9c;
+  --color-brand-500: #1fa382;
+  --color-brand-600: #0f8269;
+  --color-brand-700: #0c6857;
+  --color-brand-800: #0d5246;
+  --color-brand-900: #0c443b;
+  --color-brand-950: #042722;
+
+  --color-accent-50: #fff8ed;
+  --color-accent-100: #ffefd4;
+  --color-accent-200: #ffdba8;
+  --color-accent-300: #ffc171;
+  --color-accent-400: #ff9d38;
+  --color-accent-500: #fe8112;
+  --color-accent-600: #ef6608;
+  --color-accent-700: #c64c09;
+  --color-accent-800: #9d3c10;
+  --color-accent-900: #7e3310;
+
+  --font-display: 'Georgia', 'Times New Roman', serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white text-slate-800 antialiased;
+}
+
+/* Utility used by hero/card overlays to keep white text legible on photos. */
+@utility photo-scrim {
+  background-image: linear-gradient(
+    to top,
+    rgb(0 0 0 / 0.78) 0%,
+    rgb(0 0 0 / 0.35) 45%,
+    rgb(0 0 0 / 0.05) 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

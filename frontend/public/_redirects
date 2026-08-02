@@ -1,0 +1,5 @@
+# SPA fallback: serve index.html for client-side routes so a hard refresh on
+# /packages/manali-solang-snow-escape-5d does not 404.
+# The /api/* rewrite is configured in the Amplify console instead of here,
+# because it needs the deployed Lambda Function URL as its target.
+/*    /index.html   200

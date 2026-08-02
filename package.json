@@ -1,0 +1,33 @@
+{
+  "name": "travelhub",
+  "private": true,
+  "version": "1.0.0",
+  "description": "TravelHub - travel packages marketplace",
+  "workspaces": [
+    "shared",
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c magenta,cyan \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "dev:web": "npm run dev -w frontend",
+    "dev:api": "npm run dev -w backend",
+    "build": "npm run build -w shared && npm run build -w backend && npm run build -w frontend",
+    "build:web": "npm run build -w shared && npm run build -w frontend",
+    "build:api": "npm run build -w shared && npm run build -w backend",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "clean": "rimraf frontend/dist backend/dist shared/dist"
+  },
+  "devDependencies": {
+    "@aws-amplify/backend": "^1.11.0",
+    "@aws-amplify/backend-cli": "^1.4.9",
+    "aws-cdk-lib": "^2.174.0",
+    "concurrently": "^9.1.2",
+    "constructs": "^10.4.2",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
