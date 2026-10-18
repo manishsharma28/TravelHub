@@ -1,4 +1,6 @@
 import { defineBackend } from '@aws-amplify/backend';
+import { Stack } from 'aws-cdk-lib';
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { FunctionUrlAuthType, HttpMethod } from 'aws-cdk-lib/aws-lambda';
 import { api } from './functions/api/resource';
 
@@ -13,6 +15,17 @@ import { api } from './functions/api/resource';
 const backend = defineBackend({ api });
 
 const apiLambda = backend.api.resources.lambda;
+
+// Lets the API email enquiries through SES. The pattern covers both ways of
+// verifying the sender: the address info@unmappedtrips.com or the whole domain.
+apiLambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['ses:SendEmail'],
+    resources: [
+      Stack.of(apiLambda).formatArn({ service: 'ses', resource: 'identity', resourceName: '*unmappedtrips.com' }),
+    ],
+  }),
+);
 
 const functionUrl = apiLambda.addFunctionUrl({
   authType: FunctionUrlAuthType.NONE,

@@ -5,42 +5,31 @@ import { useApi } from '../lib/useApi';
 import { formatPrice } from '../lib/format';
 import { PackageCard, PackageCardSkeleton } from '../components/PackageCard';
 import { EnquiryForm } from '../components/EnquiryForm';
-import { HeadsetIcon, SearchIcon, ShieldIcon, StarIcon, WalletIcon } from '../components/Icons';
+import { PinIcon, SearchIcon, ShieldIcon, StarIcon, UsersIcon } from '../components/Icons';
 
-const DURATIONS = [
-  { label: 'Any duration', min: '', max: '' },
-  { label: '1 – 3 Nights', min: '1', max: '3' },
-  { label: '4 – 5 Nights', min: '4', max: '5' },
-  { label: '6 – 7 Nights', min: '6', max: '7' },
-  { label: '8 – 9 Nights', min: '8', max: '9' },
-  { label: '10+ Nights', min: '10', max: '' },
-];
+const TRIP_STYLES = ['Shimla & Manali road trips', 'Winter Spiti 4×4 expeditions', 'Spiti bike tours'];
 
+// Each title is split where it should break on phones, so all three wrap to two balanced lines.
 const TRUST = [
-  { icon: ShieldIcon, title: 'Verified operators', body: 'Every partner is vetted for licences, insurance and on-ground support before listing.' },
-  { icon: WalletIcon, title: 'Transparent pricing', body: 'Full inclusions and exclusions on every package. No surprise charges after booking.' },
-  { icon: HeadsetIcon, title: 'Human support', body: 'Talk to a real travel expert who has actually been on these routes.' },
+  { icon: PinIcon, lines: ['Beyond the', 'usual trail'] },
+  { icon: ShieldIcon, lines: ['Thoughtfully', 'planned'] },
+  { icon: UsersIcon, lines: ['Authentic', 'and local'] },
 ];
 
 const HeroSearch = () => {
   const navigate = useNavigate();
   const [destination, setDestination] = useState('');
-  const [durationIndex, setDurationIndex] = useState(0);
 
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
-    const params = new URLSearchParams();
-    if (destination.trim()) params.set('search', destination.trim());
-    const duration = DURATIONS[durationIndex];
-    if (duration?.min) params.set('minNights', duration.min);
-    if (duration?.max) params.set('maxNights', duration.max);
-    navigate(`/packages${params.toString() ? `?${params}` : ''}`);
+    const term = destination.trim();
+    navigate(term ? `/packages?search=${encodeURIComponent(term)}` : '/packages');
   };
 
   return (
     <form
       onSubmit={submit}
-      className="mx-auto mt-8 flex w-full max-w-3xl flex-col gap-3 rounded-2xl bg-white/95 p-4 shadow-2xl backdrop-blur sm:flex-row sm:items-end"
+      className="mx-auto mt-8 flex w-full max-w-2xl flex-col gap-3 rounded-2xl bg-white/95 p-4 shadow-2xl backdrop-blur sm:flex-row sm:items-end"
     >
       <div className="flex-1">
         <label htmlFor="hero-destination" className="mb-1 block text-xs font-semibold text-slate-600">
@@ -56,24 +45,6 @@ const HeroSearch = () => {
             className="w-full rounded-lg border border-slate-300 py-2.5 pl-9 pr-3 text-sm text-slate-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/25"
           />
         </div>
-      </div>
-
-      <div className="sm:w-44">
-        <label htmlFor="hero-duration" className="mb-1 block text-xs font-semibold text-slate-600">
-          Duration
-        </label>
-        <select
-          id="hero-duration"
-          value={durationIndex}
-          onChange={(e) => setDurationIndex(Number(e.target.value))}
-          className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-3 pr-8 text-sm text-slate-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/25"
-        >
-          {DURATIONS.map((option, index) => (
-            <option key={option.label} value={index}>
-              {option.label}
-            </option>
-          ))}
-        </select>
       </div>
 
       <button
@@ -101,52 +72,53 @@ export const HomePage = () => {
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 photo-scrim" />
-        <div className="relative mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 lg:px-8 lg:py-32">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent-400">
-            Himalayan holidays, done right
-          </p>
-          <h1 className="mx-auto mt-4 max-w-3xl text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
-            Find your next trip to the mountains
+        <div className="relative mx-auto max-w-7xl px-4 pb-6 pt-20 text-center sm:px-6 sm:pb-8 sm:pt-24 lg:px-8 lg:pb-10 lg:pt-32">
+          <h1 className="mx-auto max-w-3xl text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
+            <span className="block">Escape the Crowds</span>
+            <span className="block">
+              Discover the <span className="text-accent-400">Unmapped</span>
+            </span>
           </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-base text-slate-200 sm:text-lg">
-            Compare curated packages from verified operators across Himachal, Spiti and Ladakh —
-            with real itineraries and transparent pricing.
-          </p>
           <HeroSearch />
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-slate-200">
-            <span className="font-semibold">1M+ travellers served</span>
-            <span className="hidden h-4 w-px bg-white/30 sm:block" />
-            <span className="font-semibold">500+ verified operators</span>
-            <span className="hidden h-4 w-px bg-white/30 sm:block" />
-            <span className="font-semibold">15+ years of trust</span>
-          </div>
+          {/* One per line on phones, a single centred row from sm up. */}
+          <ul className="mt-6 flex flex-col items-center gap-2 sm:flex-row sm:flex-wrap sm:justify-center">
+            {TRIP_STYLES.map((style) => (
+              <li
+                key={style}
+                className="rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-sm sm:text-sm"
+              >
+                {style}
+              </li>
+            ))}
+          </ul>
+          {/* Same type as it had in the footer; lighter grey so it reads on the photo. */}
+          <p className="mt-10 text-xs text-slate-300">Explore Beyond the Map. Discover Beyond the Ordinary.</p>
         </div>
       </section>
 
       {/* Trust bar */}
-      <section className="border-b border-slate-200 bg-slate-50">
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
-          {TRUST.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="flex gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-100 text-brand-700">
-                <Icon className="h-6 w-6" />
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto grid max-w-5xl grid-cols-3 divide-x divide-slate-200 px-2 py-5 sm:px-6 sm:py-6">
+          {TRUST.map(({ icon: Icon, lines }) => (
+            <div
+              key={lines.join(' ')}
+              className="flex flex-col items-center gap-2 px-2 text-center sm:flex-row sm:justify-center sm:gap-3 sm:text-left"
+            >
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-50 text-accent-600">
+                <Icon className="h-5 w-5" />
               </div>
-              <div>
-                <h3 className="text-sm font-bold text-slate-900">{title}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-slate-600">{body}</p>
-              </div>
+              <h3 className="text-xs font-semibold leading-snug text-slate-800 sm:text-sm">
+                <span className="block sm:inline">{lines[0]}</span> <span className="block sm:inline">{lines[1]}</span>
+              </h3>
             </div>
           ))}
         </div>
       </section>
 
       {/* Destinations */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 sm:pt-16 lg:px-8">
         <div className="flex items-end justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Popular destinations</h2>
-            <p className="mt-2 text-sm text-slate-600">Handpicked bases for your Himalayan trip.</p>
-          </div>
+          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Popular destinations</h2>
           <Link to="/packages" className="shrink-0 text-sm font-semibold text-brand-600 hover:underline">
             View all →
           </Link>
@@ -187,12 +159,7 @@ export const HomePage = () => {
       <section className="bg-slate-50 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between gap-4">
-            <div>
-              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Featured packages</h2>
-              <p className="mt-2 text-sm text-slate-600">
-                Our most-booked itineraries this season.
-              </p>
-            </div>
+            <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Featured packages</h2>
             <Link to="/packages" className="shrink-0 text-sm font-semibold text-brand-600 hover:underline">
               All packages →
             </Link>
@@ -243,21 +210,10 @@ export const HomePage = () => {
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:px-8">
           <div className="text-white">
             <h2 className="text-2xl font-bold sm:text-3xl">Can’t find the right package?</h2>
-            <p className="mt-4 text-brand-100">
-              Tell us where you want to go and how long you have. We’ll get quotes from up to three
-              matching operators — usually within 24 hours, and always free.
-            </p>
-            <ul className="mt-6 space-y-2.5 text-sm text-brand-100">
-              <li>✓ Compare up to 3 custom quotes</li>
-              <li>✓ Save up to 30% versus walk-in rates</li>
-              <li>✓ No obligation to book</li>
-            </ul>
+            <p className="mt-4 text-brand-100">Tell us where and when — we’ll plan the rest.</p>
           </div>
           <div className="rounded-2xl bg-white p-6 shadow-xl">
-            <h3 className="text-lg font-bold text-slate-900">Get a custom quote</h3>
-            <p className="mb-4 mt-1 text-sm text-slate-600">
-              Fill this in and a travel expert will call you.
-            </p>
+            <h3 className="mb-4 text-lg font-bold text-slate-900">Get a custom quote</h3>
             <EnquiryForm />
           </div>
         </div>

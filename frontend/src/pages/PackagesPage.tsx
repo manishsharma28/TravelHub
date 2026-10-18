@@ -108,7 +108,7 @@ export const PackagesPage = () => {
           <p className="mt-2 text-sm text-slate-600">
             {results.loading
               ? 'Finding packages…'
-              : `${total} package${total === 1 ? '' : 's'} from verified operators. Compare quotes and save up to 30%.`}
+              : `${total} package${total === 1 ? '' : 's'}`}
           </p>
         </div>
       </div>

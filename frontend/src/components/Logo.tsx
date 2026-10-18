@@ -1,41 +1,31 @@
-import { cx } from '../lib/format';
+// Imported (not served from public/) so the built filename is content-hashed:
+// browsers and the CDN can't keep showing an old version after the logo changes.
+import logoMark from '../assets/logo-mark.png';
 
-interface LogoProps {
-  /** `dark` is for navy backgrounds: the mark sits on a white tile and the wordmark turns white. */
-  tone?: 'light' | 'dark';
-}
+/** The logo's U+T mark in a white, navy-ringed circle — matches public/favicon.png. */
+export const LogoMark = () => (
+  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-brand-800 bg-white">
+    {/* Set slightly low so the gap under the U is a bit smaller than above the T; same fit as favicon.png. */}
+    <img src={logoMark} alt="" width={263} height={240} className="w-[68%] translate-y-[10%]" />
+  </span>
+);
 
-/** U+T monogram plus a wordmark echoing the logo's "UN·MAPPED / — TRIPS —" lockup. */
-export const Logo = ({ tone = 'light' }: LogoProps) => {
-  const dark = tone === 'dark';
-  return (
-    <span className="flex items-center gap-2.5">
-      <span className={cx('flex shrink-0', dark && 'rounded-lg bg-white p-1.5')}>
-        <img src="/logo-mark.png" alt="" width={289} height={240} className="h-10 w-auto" />
-      </span>
-      {/* The space keeps the accessible name "Unmapped Trips"; flex drops it from layout. */}
-      <span className="flex flex-col leading-none">
-        <span
-          className={cx(
-            'text-lg font-extrabold uppercase tracking-tight',
-            dark ? 'text-white' : 'text-brand-800',
-          )}
-        >
-          Un<span className="text-accent-500">mapped</span>
-        </span>{' '}
-        <span className="mt-1 flex items-center gap-1.5">
-          <span className="h-px flex-1 bg-accent-500" />
-          <span
-            className={cx(
-              '-mr-[0.4em] text-[10px] font-semibold uppercase tracking-[0.4em]',
-              dark ? 'text-slate-200' : 'text-brand-800',
-            )}
-          >
-            Trips
-          </span>
-          <span className="h-px flex-1 bg-accent-500" />
+/** Monogram plus a wordmark echoing the "UN·MAPPED / — TRIPS —" lockup. */
+export const Logo = () => (
+  <span className="flex items-center gap-2">
+    <LogoMark />
+    {/* The space keeps the accessible name "Unmapped Trips"; flex drops it from layout. */}
+    <span className="flex flex-col leading-none">
+      <span className="text-[15px] font-extrabold uppercase tracking-tight text-brand-800">
+        Un<span className="text-accent-500">mapped</span>
+      </span>{' '}
+      <span className="mt-1 flex items-center gap-1.5">
+        <span className="h-px flex-1 bg-accent-500" />
+        <span className="mr-[-0.4em] text-[9px] font-semibold uppercase tracking-[0.4em] text-brand-800">
+          Trips
         </span>
+        <span className="h-px flex-1 bg-accent-500" />
       </span>
     </span>
-  );
-};
+  </span>
+);

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { CONTACT } from '../lib/contact';
 import { cx } from '../lib/format';
 import { CloseIcon, SearchIcon } from './Icons';
 import { Logo } from './Logo';
@@ -65,10 +66,10 @@ export const Header = () => {
         </form>
 
         <a
-          href="tel:+919876543210"
+          href={CONTACT.phoneHref}
           className="hidden shrink-0 rounded-full bg-accent-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-accent-600 sm:block"
         >
-          +91 98765 43210
+          {CONTACT.phone}
         </a>
 
         <button

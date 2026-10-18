@@ -29,6 +29,10 @@
   --color-accent-800: #7c3c0e;
   --color-accent-900: #62300e;
 
+  /* Brand colours for the WhatsApp/Gmail contact buttons. */
+  --color-whatsapp: #25d366;
+  --color-gmail: #ea4335;
+
   --font-display: 'Georgia', 'Times New Roman', serif;
 }
 
@@ -40,6 +44,16 @@ body {
   @apply bg-white text-slate-800 antialiased;
 }
 
+/* One faded, italic placeholder style site-wide (preflight's default is 50% of the text
+   colour). In the base layer so `placeholder:` utilities can still override it. */
+@layer base {
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-slate-400);
+    font-style: italic;
+  }
+}
+
 /* Utility used by hero/card overlays to keep white text legible on photos. */
 @utility photo-scrim {
   background-image: linear-gradient(
@@ -48,6 +62,11 @@ body {
     rgb(0 0 0 / 0.35) 45%,
     rgb(0 0 0 / 0.05) 100%
   );
+}
+
+/* Instagram's brand gradient, for the footer contact button. */
+@utility bg-instagram {
+  background-image: linear-gradient(45deg, #f58529 0%, #dd2a7b 50%, #8134af 100%);
 }
 
 @media (prefers-reduced-motion: reduce) {

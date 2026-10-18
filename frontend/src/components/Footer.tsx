@@ -1,79 +1,65 @@
 import { Link } from 'react-router-dom';
-import { Logo } from './Logo';
+import { CONTACT, openGmailOnDesktop } from '../lib/contact';
+import { cx } from '../lib/format';
+import { GmailIcon, InstagramIcon, PhoneIcon, WhatsAppIcon } from './Icons';
 
-const COLUMNS = [
-  {
-    heading: 'Destinations',
-    links: [
-      { label: 'Manali', to: '/packages?destination=Manali' },
-      { label: 'Shimla', to: '/packages?destination=Shimla' },
-      { label: 'Spiti Valley', to: '/packages?destination=Spiti%20Valley' },
-      { label: 'Dharamshala', to: '/packages?destination=Dharamshala' },
-      { label: 'Kasol', to: '/packages?destination=Kasol' },
-    ],
-  },
-  {
-    heading: 'Themes',
-    links: [
-      { label: 'Honeymoon', to: '/packages?themes=Honeymoon' },
-      { label: 'Adventure', to: '/packages?themes=Adventure' },
-      { label: 'Trekking', to: '/packages?themes=Trekking' },
-      { label: 'Family', to: '/packages?themes=Family' },
-      { label: 'Pilgrimage', to: '/packages?themes=Pilgrimage' },
-    ],
-  },
-  {
-    heading: 'Company',
-    links: [
-      { label: 'About us', to: '/about' },
-      { label: 'All packages', to: '/packages' },
-      { label: 'Contact', to: '/about#contact' },
-    ],
-  },
+const CONTACT_LINKS = [
+  { label: `Call us on ${CONTACT.callPhone}`, href: CONTACT.callPhoneHref, icon: PhoneIcon, className: 'bg-blue-500' },
+  { label: 'Chat with us on WhatsApp', href: CONTACT.whatsappUrl, icon: WhatsAppIcon, className: 'bg-whatsapp' },
+  { label: `Email us at ${CONTACT.email}`, href: `mailto:${CONTACT.email}`, icon: GmailIcon, className: 'bg-gmail', onClick: openGmailOnDesktop },
+  { label: 'Follow us on Instagram', href: CONTACT.instagramUrl, icon: InstagramIcon, className: 'bg-instagram' },
+];
+
+const COMPANY_LINKS = [
+  { label: 'About us', to: '/about' },
+  { label: 'All packages', to: '/packages' },
+  { label: 'Contact', to: '/about#contact' },
 ];
 
 export const Footer = () => (
   <footer className="mt-20 bg-brand-900 text-slate-300">
     <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-      <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
-        <div className="lg:col-span-2">
-          <Logo tone="dark" />
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-400">
-            Compare curated Himalayan holiday packages from verified tour operators. Real
-            itineraries, transparent inclusions, and a human on the phone when you need one.
-          </p>
-          <p className="mt-5 text-sm">
-            <a href="tel:+919876543210" className="font-semibold text-white hover:text-accent-400">
-              +91 98765 43210
-            </a>
-            <span className="mx-2 text-slate-600">·</span>
-            <a href="mailto:hello@unmappedtrips.example" className="hover:text-accent-400">
-              hello@unmappedtrips.example
-            </a>
-          </p>
-        </div>
+      <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
+        <ul className="flex max-w-sm justify-between md:w-full">
+          {CONTACT_LINKS.map(({ label, href, icon: Icon, className, onClick }) => {
+            const external = href.startsWith('https:');
+            return (
+              <li key={label}>
+                <a
+                  href={href}
+                  aria-label={label}
+                  title={label}
+                  target={external ? '_blank' : undefined}
+                  rel={external ? 'noreferrer' : undefined}
+                  onClick={onClick}
+                  className={cx(
+                    'flex h-12 w-12 items-center justify-center rounded-full text-white shadow-sm transition hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white',
+                    className,
+                  )}
+                >
+                  <Icon className="h-6 w-6" />
+                </a>
+              </li>
+            );
+          })}
+        </ul>
 
-        {COLUMNS.map((column) => (
-          <div key={column.heading}>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
-              {column.heading}
-            </h3>
-            <ul className="mt-4 space-y-2.5">
-              {column.links.map((link) => (
-                <li key={link.label}>
-                  <Link to={link.to} className="text-sm text-slate-400 transition hover:text-accent-400">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+        <div>
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-white">Company</h3>
+          <ul className="mt-4 space-y-2.5">
+            {COMPANY_LINKS.map((link) => (
+              <li key={link.label}>
+                <Link to={link.to} className="text-sm text-slate-400 transition hover:text-accent-400">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
-      <div className="mt-12 flex flex-col gap-3 border-t border-slate-800 pt-6 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Unmapped Trips. Demo project — packages shown are sample data.</p>
-        <p>Made for the Himalayas 🏔</p>
+      <div className="mt-12 border-t border-slate-800 pt-6 text-xs text-slate-500">
+        <p>© {new Date().getFullYear()} Unmapped Trips. Demo project — packages shown are sample data.</p>
       </div>
     </div>
   </footer>

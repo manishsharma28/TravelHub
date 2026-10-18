@@ -232,10 +232,7 @@ export const PackageDetailPage = () => {
                 <p className="text-xs text-slate-500">per person, on twin sharing</p>
 
                 <div className="mt-5 border-t border-slate-100 pt-5">
-                  <h3 className="text-base font-bold text-slate-900">Request a callback</h3>
-                  <p className="mb-4 mt-1 text-xs text-slate-600">
-                    Get quotes from up to 3 verified operators.
-                  </p>
+                  <h3 className="mb-4 text-base font-bold text-slate-900">Request a callback</h3>
                   <EnquiryForm packageId={pkg.id} packageTitle={pkg.title} compact />
                 </div>
               </div>

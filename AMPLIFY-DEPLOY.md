@@ -76,14 +76,32 @@ Copy that URL — you need it for the rewrite.
 > Order matters. This rule must sit **above** the SPA fallback below, otherwise `/api/...` requests
 > get served `index.html`.
 
-Then confirm the SPA fallback exists (Amplify usually adds it automatically):
+Then add the SPA fallback **below** it, replacing the `/<*>` rule Amplify adds by default:
 
 | Source address | Target address | Type |
 | --- | --- | --- |
-| `/<*>` | `/index.html` | 200 (Rewrite) |
+| `</^[^.]+$\|\.(?!(css\|gif\|ico\|jpg\|jpeg\|js\|png\|txt\|svg\|woff\|woff2\|ttf\|map\|json\|webp)$)([^.]+$)/>` | `/index.html` | 200 (Rewrite) |
 
-Redeploy after saving. `https://<your-app>.amplifyapp.com/api/health` should now return
-`{"status":"ok",...}`.
+(Type the source without the backslashes — they only escape `|` for this table.) The regex skips
+static files, so `/assets/*.js` and `/assets/*.css` are served as-is. A bare `/<*>` → `/index.html`
+200 rule would also rewrite those, and the site renders a blank page.
+
+Rules are per Amplify app: if the custom domain is attached to a different app, add them there too.
+`https://<your-domain>/api/health` should now return `{"status":"ok",...}`.
+
+### 6. Verify the enquiry email address in SES
+
+Every "Get Free Quotes" submission is emailed to `info@unmappedtrips.com` through Amazon SES, sent
+from that same address with Reply-To set to the traveller. SES only sends from verified addresses:
+
+1. AWS Console → **Amazon SES**, switched to the **same region as the Amplify app**.
+2. **Identities → Create identity → Email address** → `info@unmappedtrips.com` → Create.
+3. Open the verification email in that inbox and click the link. The identity shows **Verified**.
+
+That is enough even while the account is in the SES sandbox, because mail only ever goes to this one
+verified address. (Verifying the whole `unmappedtrips.com` domain instead also works.) The address is
+set in `amplify/functions/api/resource.ts`. Until it is verified, submissions fail with a "couldn't
+send your enquiry" message and the error appears in the function's CloudWatch logs.
 
 ## Environment variables
 
@@ -106,8 +124,10 @@ Then load the site and confirm a hard refresh on a deep link like
 
 ## Troubleshooting
 
-**`/api/*` returns the HTML page.** The SPA fallback is matching first. Move the `/api/<*>` rule
-above `/<*>` in the rewrites list.
+**`/api/*` returns the HTML page** (the site shows "Request failed with status 404", and
+`curl -I https://<your-domain>/api/health` shows a 301 to `/api/health/` from `AmazonS3`). The
+`/api/<*>` rule is missing from this app, or the SPA fallback is matching first. Add the rule, and
+make sure it sits above the fallback in the rewrites list.
 
 **404 from the Lambda.** The rewrite target must keep the `/api` prefix — the Express routes are
 mounted at `/api`. Target `.../api/<*>`, not `.../<*>`.

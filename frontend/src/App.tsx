@@ -2,6 +2,7 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { WhatsAppButton } from './components/WhatsAppButton';
 import { HomePage } from './pages/HomePage';
 import { PackagesPage } from './pages/PackagesPage';
 import { PackageDetailPage } from './pages/PackageDetailPage';
@@ -31,5 +32,6 @@ export const App = () => (
       </Routes>
     </main>
     <Footer />
+    <WhatsAppButton />
   </div>
 );

@@ -12,4 +12,9 @@ export const api = defineFunction({
   timeoutSeconds: 30,
   memoryMB: 512,
   runtime: 20,
+  environment: {
+    // Enquiries are emailed here via SES; the address must be verified in SES
+    // (see AMPLIFY-DEPLOY.md). It is also the sender unless ENQUIRY_EMAIL_FROM is set.
+    ENQUIRY_EMAIL_TO: 'info@unmappedtrips.com',
+  },
 });

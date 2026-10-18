@@ -134,6 +134,7 @@ export interface EnquiryPayload {
   email: string;
   phone: string;
   packageId?: string;
+  destination?: string;
   travelDate?: string;
   travellers?: number;
   message?: string;

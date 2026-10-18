@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { EnquiryPayload } from '@travelhub/shared';
 import { ApiError, api } from '../lib/api';
-import { CheckIcon } from './Icons';
+import { CheckIcon, ChevronIcon } from './Icons';
 
 interface Props {
   packageId?: string;
@@ -11,12 +11,28 @@ interface Props {
 
 type Status = 'idle' | 'submitting' | 'success';
 
+// Matches the API's validation (positive, at most 50).
+const MIN_TRAVELLERS = 1;
+const MAX_TRAVELLERS = 50;
+
+const DESTINATION_GROUPS = [
+  {
+    label: 'Himachal & Spiti',
+    places: ['Spiti Valley', 'Shimla', 'Manali', 'Dharamshala', 'Dalhousie', 'Jibhi', 'Shanghar', 'Barot Valley', 'Kasol', 'Bir Billing'],
+  },
+  {
+    label: 'Beyond Himachal',
+    places: ['Zanskar', 'Leh–Ladakh', 'Kashmir', 'Uttarakhand', 'Northeast India', 'Nepal', 'Bhutan'],
+  },
+];
+
 const initialForm = {
   name: '',
   email: '',
   phone: '',
+  destination: '',
   travelDate: '',
-  travellers: '2',
+  travellers: '',
   message: '',
 };
 
@@ -27,9 +43,18 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false }: Props)
   const [formError, setFormError] = useState<string | null>(null);
   const [confirmation, setConfirmation] = useState<string>('');
 
-  const update = (key: keyof typeof initialForm) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const update = (key: keyof typeof initialForm) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm((prev) => ({ ...prev, [key]: event.target.value }));
     setFieldErrors((prev) => ({ ...prev, [key]: '' }));
+  };
+
+  // Empty counts as 0, so the first "up" lands on 1 and "down" starts disabled.
+  const travellerCount = Number(form.travellers) || 0;
+
+  const stepTravellers = (delta: number) => {
+    const next = Math.min(MAX_TRAVELLERS, Math.max(MIN_TRAVELLERS, travellerCount + delta));
+    setForm((prev) => ({ ...prev, travellers: String(next) }));
+    setFieldErrors((prev) => ({ ...prev, travellers: '' }));
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -43,6 +68,7 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false }: Props)
       email: form.email,
       phone: form.phone,
       packageId,
+      destination: form.destination || undefined,
       travelDate: form.travelDate || undefined,
       travellers: form.travellers ? Number(form.travellers) : undefined,
       message: form.message || undefined,
@@ -88,6 +114,9 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false }: Props)
       fieldErrors[field] ? 'border-red-400 focus:border-red-500' : 'border-slate-300 focus:border-brand-500'
     }`;
 
+  // Selects and date inputs have no ::placeholder, so style their empty state to match.
+  const emptyClass = (value: string) => (value ? '' : 'italic text-slate-400');
+
   const Error = ({ field }: { field: string }) =>
     fieldErrors[field] ? <p className="mt-1 text-xs text-red-600">{fieldErrors[field]}</p> : null;
 
@@ -103,7 +132,7 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false }: Props)
         <label htmlFor="eq-name" className="mb-1 block text-xs font-medium text-slate-700">
           Full name
         </label>
-        <input id="eq-name" value={form.name} onChange={update('name')} required placeholder="Your name" className={inputClass('name')} />
+        <input id="eq-name" value={form.name} onChange={update('name')} required placeholder="e.g. Rohan Sharma" className={inputClass('name')} />
         <Error field="name" />
       </div>
 
@@ -112,30 +141,95 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false }: Props)
           <label htmlFor="eq-email" className="mb-1 block text-xs font-medium text-slate-700">
             Email
           </label>
-          <input id="eq-email" type="email" value={form.email} onChange={update('email')} required placeholder="you@example.com" className={inputClass('email')} />
+          <input id="eq-email" type="email" value={form.email} onChange={update('email')} required placeholder="e.g. rohan@email.com" className={inputClass('email')} />
           <Error field="email" />
         </div>
         <div className={compact ? 'mt-3.5' : ''}>
           <label htmlFor="eq-phone" className="mb-1 block text-xs font-medium text-slate-700">
             Phone
           </label>
-          <input id="eq-phone" type="tel" value={form.phone} onChange={update('phone')} required placeholder="+91 98765 43210" className={inputClass('phone')} />
+          <input id="eq-phone" type="tel" value={form.phone} onChange={update('phone')} required placeholder="e.g. 98765 43210" className={inputClass('phone')} />
           <Error field="phone" />
         </div>
       </div>
+
+      {/* A package enquiry already implies its destination. */}
+      {!packageId && (
+        <div>
+          <label htmlFor="eq-destination" className="mb-1 block text-xs font-medium text-slate-700">
+            Destination
+          </label>
+          <select
+            id="eq-destination"
+            value={form.destination}
+            onChange={update('destination')}
+            className={`${inputClass('destination')} bg-white ${emptyClass(form.destination)}`}
+          >
+            <option value="" disabled hidden>
+              Where would you like to go?
+            </option>
+            <option value="Not sure yet" className="text-slate-800 not-italic">
+              Not sure yet — help me choose
+            </option>
+            {DESTINATION_GROUPS.map((group) => (
+              <optgroup key={group.label} label={group.label} className="text-slate-800 not-italic">
+                {group.places.map((place) => (
+                  <option key={place} value={place} className="text-slate-800 not-italic">
+                    {place}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+          <Error field="destination" />
+        </div>
+      )}
 
       <div className={compact ? '' : 'grid gap-3.5 sm:grid-cols-2'}>
         <div>
           <label htmlFor="eq-date" className="mb-1 block text-xs font-medium text-slate-700">
             Travel date
           </label>
-          <input id="eq-date" type="date" value={form.travelDate} onChange={update('travelDate')} className={inputClass('travelDate')} />
+          <input id="eq-date" type="date" value={form.travelDate} onChange={update('travelDate')} className={`${inputClass('travelDate')} ${emptyClass(form.travelDate)}`} />
         </div>
         <div className={compact ? 'mt-3.5' : ''}>
           <label htmlFor="eq-travellers" className="mb-1 block text-xs font-medium text-slate-700">
             Travellers
           </label>
-          <input id="eq-travellers" type="number" min={1} max={50} value={form.travellers} onChange={update('travellers')} className={inputClass('travellers')} />
+          <div className="relative">
+            <input
+              id="eq-travellers"
+              type="number"
+              inputMode="numeric"
+              min={MIN_TRAVELLERS}
+              max={MAX_TRAVELLERS}
+              value={form.travellers}
+              onChange={update('travellers')}
+              placeholder="e.g. 2"
+              // Native spinners are tiny and hidden on touch, so they're replaced by the buttons below.
+              className={`${inputClass('travellers')} pr-12 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
+            />
+            <div className="absolute inset-y-px right-px flex w-10 flex-col overflow-hidden rounded-r-lg border-l border-slate-200 bg-slate-50">
+              <button
+                type="button"
+                onClick={() => stepTravellers(1)}
+                disabled={travellerCount >= MAX_TRAVELLERS}
+                aria-label="Add a traveller"
+                className="flex flex-1 items-center justify-center text-slate-500 transition hover:bg-slate-200 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <ChevronIcon className="h-3.5 w-3.5 -rotate-90" />
+              </button>
+              <button
+                type="button"
+                onClick={() => stepTravellers(-1)}
+                disabled={travellerCount <= MIN_TRAVELLERS}
+                aria-label="Remove a traveller"
+                className="flex flex-1 items-center justify-center border-t border-slate-200 text-slate-500 transition hover:bg-slate-200 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <ChevronIcon className="h-3.5 w-3.5 rotate-90" />
+              </button>
+            </div>
+          </div>
           <Error field="travellers" />
         </div>
       </div>
@@ -144,7 +238,7 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false }: Props)
         <label htmlFor="eq-message" className="mb-1 block text-xs font-medium text-slate-700">
           Message <span className="text-slate-400">(optional)</span>
         </label>
-        <textarea id="eq-message" value={form.message} onChange={update('message')} rows={3} placeholder="Tell us what you're looking for…" className={inputClass('message')} />
+        <textarea id="eq-message" value={form.message} onChange={update('message')} rows={2} placeholder="e.g. 6-day Spiti road trip in June, 2 adults" className={`${inputClass('message')} resize-none placeholder:text-xs`} />
       </div>
 
       {formError && (
@@ -160,9 +254,6 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false }: Props)
       >
         {status === 'submitting' ? 'Sending…' : 'Get Free Quotes'}
       </button>
-      <p className="text-center text-[11px] text-slate-400">
-        No spam. We share your enquiry only with matching verified operators.
-      </p>
     </form>
   );
 };
