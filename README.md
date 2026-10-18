@@ -1,4 +1,4 @@
-# TravelHub
+# Unmapped Trips
 
 A travel-packages marketplace for Himalayan holidays — browse curated tour packages, filter by
 price/theme/duration/destination, and send enquiries to operators.

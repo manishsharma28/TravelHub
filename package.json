@@ -2,7 +2,7 @@
   "name": "travelhub",
   "private": true,
   "version": "1.0.0",
-  "description": "TravelHub - travel packages marketplace",
+  "description": "Unmapped Trips - travel packages marketplace",
   "type": "module",
   "workspaces": [
     "shared",

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { cx } from '../lib/format';
 import { CloseIcon, SearchIcon } from './Icons';
+import { Logo } from './Logo';
 
 const NAV = [
   { to: '/packages', label: 'All Packages' },
@@ -26,15 +27,8 @@ export const Header = () => {
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="flex shrink-0 items-center gap-2">
-          <svg className="h-9 w-9" viewBox="0 0 32 32" aria-hidden="true">
-            <rect width="32" height="32" rx="7" className="fill-brand-600" />
-            <path d="M6 23 L13 11 L17.5 18 L20.5 13.5 L26 23 Z" fill="#fff" />
-            <circle cx="22.5" cy="8.5" r="2.6" className="fill-accent-400" />
-          </svg>
-          <span className="text-xl font-bold tracking-tight text-slate-900">
-            Travel<span className="text-brand-600">Hub</span>
-          </span>
+        <Link to="/" className="shrink-0">
+          <Logo />
         </Link>
 
         <nav className="hidden flex-1 items-center gap-1 lg:flex">

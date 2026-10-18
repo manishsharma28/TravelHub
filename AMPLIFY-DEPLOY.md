@@ -1,4 +1,4 @@
-# Deploying TravelHub to AWS Amplify
+# Deploying Unmapped Trips to AWS Amplify
 
 This repo deploys as a **single Amplify app**: the Vite SPA is served as static files from the CDN,
 and the Express API runs as a Lambda function defined in `amplify/`.

@@ -102,7 +102,7 @@ export const HomePage = () => {
         />
         <div className="absolute inset-0 photo-scrim" />
         <div className="relative mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 lg:px-8 lg:py-32">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-300">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent-400">
             Himalayan holidays, done right
           </p>
           <h1 className="mx-auto mt-4 max-w-3xl text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">

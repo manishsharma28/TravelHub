@@ -30,7 +30,7 @@ export const AboutPage = () => (
   <div>
     <section className="bg-brand-800 py-16 text-white">
       <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold sm:text-4xl">About TravelHub</h1>
+        <h1 className="text-3xl font-bold sm:text-4xl">About Unmapped Trips</h1>
         <p className="mt-5 text-lg leading-relaxed text-brand-100">
           We are a marketplace for Himalayan holidays — connecting travellers with vetted local tour
           operators instead of faceless call centres.
@@ -84,8 +84,8 @@ export const AboutPage = () => (
             <div>
               <dt className="font-semibold text-slate-900">Email</dt>
               <dd>
-                <a href="mailto:hello@travelhub.example" className="text-brand-700 hover:underline">
-                  hello@travelhub.example
+                <a href="mailto:hello@unmappedtrips.example" className="text-brand-700 hover:underline">
+                  hello@unmappedtrips.example
                 </a>
               </dd>
             </div>
