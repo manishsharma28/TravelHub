@@ -26,8 +26,13 @@ frontend:
         - npm install --cache .npm --prefer-offline
     build:
       commands:
+        # The backend phase normally leaves amplify_outputs.json behind; fetch it if not.
+        - test -f amplify_outputs.json || npx ampx generate outputs --branch $AWS_BRANCH --app-id $AWS_APP_ID || true
+        # Bake the API's Function URL into the site so it doesn't need the console's
+        # /api rewrite rule (empty -> falls back to same-origin /api requests).
+        - echo "API base URL is [$(node scripts/print-api-url.mjs)]"
         # build:web already compiles shared, then the Vite frontend
-        - npm run build:web
+        - VITE_API_BASE_URL="$(node scripts/print-api-url.mjs)" npm run build:web
   artifacts:
     baseDirectory: frontend/dist
     files:

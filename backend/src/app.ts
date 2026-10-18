@@ -22,13 +22,12 @@ export const createApp = (): Express => {
     .map((o) => o.trim())
     .filter(Boolean);
 
-  app.use(
-    cors({
-      origin: allowedOrigins.length > 0 ? allowedOrigins : true,
-      methods: ['GET', 'POST', 'OPTIONS'],
-      credentials: false,
-    }),
-  );
+  // Opt-in only. In production the Lambda Function URL adds CORS headers itself
+  // (amplify/backend.ts), and adding them here as well would duplicate them, which
+  // browsers reject. Locally, Vite proxies /api, so requests are same-origin.
+  if (allowedOrigins.length > 0) {
+    app.use(cors({ origin: allowedOrigins, methods: ['GET', 'POST', 'OPTIONS'], credentials: false }));
+  }
   app.use(express.json({ limit: '100kb' }));
 
   app.get('/api/health', (_req, res) => {

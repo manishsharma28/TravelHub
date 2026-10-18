@@ -29,7 +29,7 @@ const HeroSearch = () => {
   return (
     <form
       onSubmit={submit}
-      className="mx-auto mt-8 flex w-full max-w-2xl flex-col gap-3 rounded-2xl bg-white/95 p-4 shadow-2xl backdrop-blur sm:flex-row sm:items-end"
+      className="mx-auto mt-10 flex w-full max-w-2xl flex-col gap-3 rounded-2xl bg-white/95 p-4 shadow-2xl backdrop-blur sm:flex-row sm:items-end"
     >
       <div className="flex-1">
         <label htmlFor="hero-destination" className="mb-1 block text-xs font-semibold text-slate-600">
@@ -72,27 +72,34 @@ export const HomePage = () => {
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 photo-scrim" />
-        <div className="relative mx-auto max-w-7xl px-4 pb-6 pt-20 text-center sm:px-6 sm:pb-8 sm:pt-24 lg:px-8 lg:pb-10 lg:pt-32">
-          <h1 className="mx-auto max-w-3xl text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
-            <span className="block">Escape the Crowds</span>
-            <span className="block">
-              Discover the <span className="text-accent-400">Unmapped</span>
-            </span>
-          </h1>
-          <HeroSearch />
-          {/* One per line on phones, a single centred row from sm up. */}
-          <ul className="mt-6 flex flex-col items-center gap-2 sm:flex-row sm:flex-wrap sm:justify-center">
-            {TRIP_STYLES.map((style) => (
-              <li
-                key={style}
-                className="rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-sm sm:text-sm"
-              >
-                {style}
-              </li>
-            ))}
-          </ul>
-          {/* Same type as it had in the footer; lighter grey so it reads on the photo. */}
-          <p className="mt-10 text-xs text-slate-300">Explore Beyond the Map. Discover Beyond the Ordinary.</p>
+        {/* Fills the first screen below the 4rem header: headline and search are centred,
+            the trip chips and tagline sit together at the bottom of the photo. */}
+        <div className="relative mx-auto flex min-h-[calc(100svh-4rem)] max-w-7xl flex-col px-4 text-center sm:px-6 lg:px-8">
+          <div className="flex flex-1 flex-col justify-center py-12">
+            <h1 className="mx-auto max-w-3xl text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
+              <span className="block">Escape the Crowds</span>
+              <span className="block">
+                Discover the <span className="text-accent-400">Unmapped</span>
+              </span>
+            </h1>
+            <HeroSearch />
+          </div>
+          {/* On phones this group sits higher so the floating WhatsApp button doesn't cover it. */}
+          <div className="pb-20 sm:pb-6">
+            {/* One per line on phones, a single centred row from sm up. */}
+            <ul className="flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
+              {TRIP_STYLES.map((style) => (
+                <li
+                  key={style}
+                  className="rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-sm sm:text-sm"
+                >
+                  {style}
+                </li>
+              ))}
+            </ul>
+            {/* Same type as it had in the footer; lighter grey so it reads on the photo. */}
+            <p className="mt-6 text-xs text-slate-300">Explore Beyond the Map. Discover Beyond the Ordinary.</p>
+          </div>
         </div>
       </section>
 

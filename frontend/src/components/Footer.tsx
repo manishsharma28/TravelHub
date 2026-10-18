@@ -20,7 +20,7 @@ export const Footer = () => (
   <footer className="mt-20 bg-brand-900 text-slate-300">
     <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
-        <ul className="flex max-w-sm justify-between md:w-full">
+        <ul className="flex justify-center gap-4 md:justify-start">
           {CONTACT_LINKS.map(({ label, href, icon: Icon, className, onClick }) => {
             const external = href.startsWith('https:');
             return (

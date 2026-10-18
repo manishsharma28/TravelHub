@@ -11,12 +11,15 @@ Browser
   ├── GET /                       → S3/CloudFront → frontend/dist/index.html
   ├── GET /packages/manali-…      → SPA fallback  → index.html (React Router)
   │
-  └── GET /api/packages           → Amplify rewrite → Lambda Function URL
-                                                       └── serverless-http → Express
+  └── GET https://<id>.lambda-url…/api/packages → Lambda Function URL
+                                                   └── serverless-http → Express
 ```
 
-Because `/api/*` is rewritten on the **same origin**, the browser never makes a cross-origin request,
-so there is no CORS preflight in production. This is why `VITE_API_BASE_URL` is empty by default.
+The frontend build reads the API's Function URL from `amplify_outputs.json` (written by the backend
+phase; see `scripts/print-api-url.mjs`) and bakes it in as `VITE_API_BASE_URL`, so the site calls the
+Lambda directly. CORS is handled by the Function URL's own config in `amplify/backend.ts`. If no URL
+is found, the build leaves `VITE_API_BASE_URL` empty and the site falls back to same-origin `/api`
+requests, which then need the console rewrite in step 5.
 
 ## One-time setup
 
@@ -65,7 +68,10 @@ apiFunctionUrl = https://<id>.lambda-url.<region>.on.aws/
 
 Copy that URL — you need it for the rewrite.
 
-### 5. Add the `/api/*` rewrite
+### 5. Add the rewrite rules
+
+The `/api/*` rule is only a fallback now (see above), but the SPA rule is still needed so deep links
+like `/about` return 200 instead of 404.
 
 **App settings → Rewrites and redirects → Add rule**:
 
@@ -109,8 +115,8 @@ Set these under **App settings → Environment variables** as needed:
 
 | Variable | Value | Notes |
 | --- | --- | --- |
-| `VITE_API_BASE_URL` | *(empty)* | Leave unset — the rewrite handles routing |
-| `CORS_ORIGINS` | `https://your-domain.com` | Only needed if the API is called cross-origin |
+| `VITE_API_BASE_URL` | *(unset)* | Leave unset — the build fills it from `amplify_outputs.json` |
+| `CORS_ORIGINS` | `https://your-domain.com` | Only for an API not behind the Function URL; Express adds no CORS headers otherwise |
 
 ## Verifying a deploy
 
@@ -135,8 +141,12 @@ mounted at `/api`. Target `.../api/<*>`, not `.../<*>`.
 **Backend phase skipped.** The branch isn't linked to a backend environment, or the service role is
 missing. Check **App settings → IAM roles**.
 
-**CORS errors in the browser.** Something is calling the Lambda URL directly instead of the rewrite.
-Confirm `VITE_API_BASE_URL` is empty in the Amplify environment variables and rebuild.
+**Packages don't load / "Request failed with status 404".** Check the frontend build log for
+`API base URL is [...]`. Empty brackets mean no `amplify_outputs.json` was found — usually the backend
+phase didn't run (see "Backend phase skipped"); add the `/api/<*>` rewrite from step 5 as a fallback.
+
+**CORS errors in the browser.** The Function URL's CORS config (`amplify/backend.ts`) must allow the
+request's method and headers. Don't also set `CORS_ORIGINS`, or the headers are sent twice.
 
 **Cold starts feel slow.** Normal for the first request after idle. Raise `memoryMB` in
 `amplify/functions/api/resource.ts` for faster cold starts, or move to provisioned concurrency.
