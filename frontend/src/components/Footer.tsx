@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
 import { CONTACT, openGmailOnDesktop } from '../lib/contact';
 import { cx } from '../lib/format';
-import { GmailIcon, InstagramIcon, PhoneIcon, WhatsAppIcon } from './Icons';
+import { GmailIcon, InstagramIcon, PhoneIcon } from './Icons';
 
 const CONTACT_LINKS = [
-  { label: `Call us on ${CONTACT.callPhone}`, href: CONTACT.callPhoneHref, icon: PhoneIcon, className: 'bg-blue-500' },
-  { label: 'Chat with us on WhatsApp', href: CONTACT.whatsappUrl, icon: WhatsAppIcon, className: 'bg-whatsapp' },
+  { label: `Call us on ${CONTACT.phone}`, href: CONTACT.phoneHref, icon: PhoneIcon, className: 'bg-blue-500' },
   { label: `Email us at ${CONTACT.email}`, href: `mailto:${CONTACT.email}`, icon: GmailIcon, className: 'bg-gmail', onClick: openGmailOnDesktop },
   { label: 'Follow us on Instagram', href: CONTACT.instagramUrl, icon: InstagramIcon, className: 'bg-instagram' },
 ];
@@ -13,11 +12,11 @@ const CONTACT_LINKS = [
 const COMPANY_LINKS = [
   { label: 'About us', to: '/about' },
   { label: 'All packages', to: '/packages' },
-  { label: 'Contact', to: '/about#contact' },
+  { label: 'Contact', to: '/contact' },
 ];
 
 export const Footer = () => (
-  <footer className="mt-20 bg-brand-900 text-slate-300">
+  <footer className="bg-brand-900 text-slate-300">
     <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
         <ul className="flex justify-center gap-4 md:justify-start">

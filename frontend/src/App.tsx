@@ -7,6 +7,7 @@ import { HomePage } from './pages/HomePage';
 import { PackagesPage } from './pages/PackagesPage';
 import { PackageDetailPage } from './pages/PackageDetailPage';
 import { AboutPage } from './pages/AboutPage';
+import { ContactPage } from './pages/ContactPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 /** Scrolls to top on route change, but leaves in-page filter updates alone. */
@@ -28,6 +29,7 @@ export const App = () => (
         <Route path="/packages" element={<PackagesPage />} />
         <Route path="/packages/:slug" element={<PackageDetailPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </main>

@@ -32,7 +32,8 @@ const HeroSearch = () => {
       className="mx-auto mt-10 flex w-full max-w-2xl flex-col gap-3 rounded-2xl bg-white/95 p-4 shadow-2xl backdrop-blur sm:flex-row sm:items-end"
     >
       <div className="flex-1">
-        <label htmlFor="hero-destination" className="mb-1 block text-xs font-semibold text-slate-600">
+        {/* Visually the placeholder carries the prompt; the label stays for screen readers. */}
+        <label htmlFor="hero-destination" className="sr-only">
           Where to?
         </label>
         <div className="relative">
@@ -41,7 +42,7 @@ const HeroSearch = () => {
             id="hero-destination"
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
-            placeholder="Manali, Spiti, Shimla…"
+            placeholder="Where to?"
             className="w-full rounded-lg border border-slate-300 py-2.5 pl-9 pr-3 text-sm text-slate-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/25"
           />
         </div>
@@ -213,13 +214,13 @@ export const HomePage = () => {
       </section>
 
       {/* Enquiry CTA */}
-      <section className="bg-brand-800">
+      <section className="bg-slate-50">
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:px-8">
-          <div className="text-white">
-            <h2 className="text-2xl font-bold sm:text-3xl">Can’t find the right package?</h2>
-            <p className="mt-4 text-brand-100">Tell us where and when — we’ll plan the rest.</p>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Can’t find the right package?</h2>
+            <p className="mt-4 text-slate-600">Tell us where and when — we’ll plan the rest.</p>
           </div>
-          <div className="rounded-2xl bg-white p-6 shadow-xl">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h3 className="mb-4 text-lg font-bold text-slate-900">Get a custom quote</h3>
             <EnquiryForm />
           </div>

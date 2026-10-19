@@ -2,9 +2,8 @@
 export const CONTACT = {
   phone: '+91 78071 87351',
   phoneHref: 'tel:+917807187351',
-  /** Dedicated call line, used by the footer's call button. */
-  callPhone: '+91 82192 96031',
-  callPhoneHref: 'tel:+918219296031',
+  phoneAlt: '+91 82192 96031',
+  phoneAltHref: 'tel:+918219296031',
   email: 'info@unmappedtrips.com',
   gmailComposeUrl: `https://mail.google.com/mail/?view=cm&fs=1&to=info@unmappedtrips.com&su=${encodeURIComponent('Trip enquiry')}`,
   whatsappUrl: `https://wa.me/917807187351?text=${encodeURIComponent("Hi Unmapped Trips! I'd like to plan a trip.")}`,

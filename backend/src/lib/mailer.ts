@@ -1,11 +1,28 @@
-import { SESv2Client, SendEmailCommand } from '@aws-sdk/client-sesv2';
+import { config } from 'dotenv';
+import nodemailer from 'nodemailer';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-/** Where enquiry emails go. Unset locally, so `npm run dev` never sends real mail. */
-const TO = process.env.ENQUIRY_EMAIL_TO;
-/** Must be verified in SES — either this address itself or its whole domain. */
-const FROM = process.env.ENQUIRY_EMAIL_FROM ?? TO;
+// Local dev reads backend/.env. On Lambda the file is absent and the function
+// environment, set in Amplify, supplies the same variables.
+config({ path: resolve(dirname(fileURLToPath(import.meta.url)), '../../.env') });
 
-const ses = new SESv2Client({});
+/** Enquiry mail always goes to this inbox, from the same address, unless overridden. */
+const INBOX = 'info@unmappedtrips.com';
+const TO = process.env.ENQUIRY_EMAIL_TO || INBOX;
+const FROM = process.env.ENQUIRY_EMAIL_FROM || INBOX;
+
+const SMTP_HOST = process.env.SMTP_HOST || 'smtp.zoho.in';
+const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
+const SMTP_USER = process.env.SMTP_USER || FROM;
+const SMTP_PASS = process.env.SMTP_PASS || '';
+
+const transport = nodemailer.createTransport({
+  host: SMTP_HOST,
+  port: SMTP_PORT,
+  secure: SMTP_PORT === 465,
+  auth: { user: SMTP_USER, pass: SMTP_PASS },
+});
 
 export interface EnquiryDetails {
   id: string;
@@ -37,13 +54,12 @@ const escapeHtml = (value: string) =>
   value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 /**
- * Emails a new enquiry to the team, with Reply-To set to the traveller so a
- * reply from the inbox goes straight back to them.
+ * Emails a new enquiry to the team through the Zoho mailbox. Reply-To is the
+ * traveller, so a reply from the inbox goes straight back to them.
  */
 export const sendEnquiryEmail = async (enquiry: EnquiryDetails): Promise<void> => {
-  if (!TO || !FROM) {
-    console.log(`[travelhub] ENQUIRY_EMAIL_TO not set; skipping email for enquiry ${enquiry.id}`);
-    return;
+  if (!SMTP_PASS) {
+    throw new Error('SMTP_PASS is not set. Add the Zoho mailbox password to backend/.env');
   }
 
   const rows: Array<[string, string | undefined]> = [
@@ -75,20 +91,12 @@ ${rows
 </table>
 <p style="font-family:sans-serif;font-size:12px;color:#64748b">Reply to this email to respond to ${escapeHtml(enquiry.name)} directly.</p>`;
 
-  await ses.send(
-    new SendEmailCommand({
-      FromEmailAddress: `Unmapped Trips Website <${FROM}>`,
-      Destination: { ToAddresses: [TO] },
-      ReplyToAddresses: [enquiry.email],
-      Content: {
-        Simple: {
-          Subject: { Data: subject, Charset: 'UTF-8' },
-          Body: {
-            Text: { Data: text, Charset: 'UTF-8' },
-            Html: { Data: html, Charset: 'UTF-8' },
-          },
-        },
-      },
-    }),
-  );
+  await transport.sendMail({
+    from: `Unmapped Trips Website <${FROM}>`,
+    to: TO,
+    replyTo: enquiry.email,
+    subject,
+    text,
+    html,
+  });
 };

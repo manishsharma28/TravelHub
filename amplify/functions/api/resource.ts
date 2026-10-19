@@ -13,8 +13,12 @@ export const api = defineFunction({
   memoryMB: 512,
   runtime: 20,
   environment: {
-    // Enquiries are emailed here via SES; the address must be verified in SES
-    // (see AMPLIFY-DEPLOY.md). It is also the sender unless ENQUIRY_EMAIL_FROM is set.
+    // Enquiries are sent with Zoho SMTP. SMTP_PASS is the mailbox password and
+    // must be set on the function in the Amplify console — never committed.
     ENQUIRY_EMAIL_TO: 'info@unmappedtrips.com',
+    ENQUIRY_EMAIL_FROM: 'info@unmappedtrips.com',
+    SMTP_HOST: 'smtp.zoho.in',
+    SMTP_PORT: '465',
+    SMTP_USER: 'info@unmappedtrips.com',
   },
 });

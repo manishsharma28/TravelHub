@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { BudgetCategory, PackageQuery, SortOption, Theme } from '@travelhub/shared';
 import { api } from '../lib/api';
@@ -6,7 +6,7 @@ import { useApi } from '../lib/useApi';
 import { cx } from '../lib/format';
 import { PackageCard, PackageCardSkeleton } from '../components/PackageCard';
 import { FilterSidebar } from '../components/FilterSidebar';
-import { CloseIcon, FilterIcon } from '../components/Icons';
+import { CloseIcon, FilterIcon, SearchIcon } from '../components/Icons';
 
 const SORT_LABELS: Array<{ value: SortOption; label: string }> = [
   { value: 'relevance', label: 'Relevance' },
@@ -52,6 +52,7 @@ const parseQuery = (params: URLSearchParams): PackageQuery => {
 export const PackagesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [searchDraft, setSearchDraft] = useState(searchParams.get('search') ?? '');
 
   const query = useMemo(() => parseQuery(searchParams), [searchParams]);
   const queryKey = searchParams.toString();
@@ -75,6 +76,17 @@ export const PackagesPage = () => {
     },
     [searchParams, setSearchParams],
   );
+
+  useEffect(() => {
+    setSearchDraft(query.search ?? '');
+  }, [query.search]);
+
+  useEffect(() => {
+    const term = searchDraft.trim();
+    if (term === (query.search ?? '')) return;
+    const timer = window.setTimeout(() => applyPatch({ search: term || undefined }), 250);
+    return () => window.clearTimeout(timer);
+  }, [searchDraft, query.search, applyPatch]);
 
   const resetFilters = useCallback(() => {
     const next = new URLSearchParams();
@@ -103,7 +115,7 @@ export const PackagesPage = () => {
     <div className="bg-slate-50">
       {/* Page banner */}
       <div className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 pb-4 pt-6 sm:px-6 sm:py-8 lg:px-8">
           <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">{heading}</h1>
           <p className="mt-2 text-sm text-slate-600">
             {results.loading
@@ -113,7 +125,7 @@ export const PackagesPage = () => {
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 pb-8 pt-3 sm:px-6 sm:py-8 lg:px-8">
         <div className="lg:grid lg:grid-cols-[280px_1fr] lg:gap-8">
           <div className="hidden lg:block">
             <div className="sticky top-24">{sidebar}</div>
@@ -121,16 +133,7 @@ export const PackagesPage = () => {
 
           <div>
             {/* Toolbar */}
-            <div className="mb-5 flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-              <button
-                type="button"
-                onClick={() => setDrawerOpen(true)}
-                className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 lg:hidden"
-              >
-                <FilterIcon className="h-4 w-4" />
-                Filters
-              </button>
-
+            <div className="mb-5 flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5 shadow-sm sm:px-4">
               <p className="hidden text-sm text-slate-600 lg:block">
                 Showing{' '}
                 <span className="font-semibold text-slate-900">
@@ -140,22 +143,33 @@ export const PackagesPage = () => {
                 of <span className="font-semibold text-slate-900">{total}</span>
               </p>
 
-              <div className="flex items-center gap-2">
-                <label htmlFor="sort" className="text-sm text-slate-600">
-                  Sort by
-                </label>
-                <select
-                  id="sort"
-                  value={query.sort}
-                  onChange={(e) => applyPatch({ sort: e.target.value as SortOption })}
-                  className="rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-8 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/25"
+              <div className="ml-auto flex min-w-0 flex-1 items-center gap-2 lg:flex-none">
+                <form
+                  className="relative min-w-0 flex-1 lg:w-64"
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    const term = searchDraft.trim();
+                    applyPatch({ search: term || undefined });
+                  }}
                 >
-                  {SORT_LABELS.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                  <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="search"
+                    value={searchDraft}
+                    onChange={(event) => setSearchDraft(event.target.value)}
+                    placeholder="Search packages…"
+                    aria-label="Search packages"
+                    className="w-full rounded-lg border border-slate-300 py-2 pl-9 pr-3 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/25"
+                  />
+                </form>
+                <button
+                  type="button"
+                  onClick={() => setDrawerOpen(true)}
+                  aria-label="Filters"
+                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-300 text-slate-700"
+                >
+                  <FilterIcon className="h-5 w-5" />
+                </button>
               </div>
             </div>
 
@@ -235,7 +249,7 @@ export const PackagesPage = () => {
 
       {/* Mobile filter drawer */}
       {drawerOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
+        <div className="fixed inset-0 z-50">
           <div
             className="absolute inset-0 bg-slate-900/50"
             onClick={() => setDrawerOpen(false)}
@@ -252,6 +266,23 @@ export const PackagesPage = () => {
               >
                 <CloseIcon className="h-5 w-5" />
               </button>
+            </div>
+            <div className="mb-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+              <label htmlFor="sort-drawer" className="mb-2 block text-sm font-semibold text-slate-900">
+                Sort by
+              </label>
+              <select
+                id="sort-drawer"
+                value={query.sort}
+                onChange={(event) => applyPatch({ sort: event.target.value as SortOption })}
+                className="w-full rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-8 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/25"
+              >
+                {SORT_LABELS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </div>
             {sidebar}
             <button

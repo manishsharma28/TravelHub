@@ -49,7 +49,8 @@ enquiriesRouter.post(
       await sendEnquiryEmail({ ...record, packageTitle: pkg?.title });
     } catch (err) {
       // Without the email nothing is kept, so tell the traveller rather than fake success.
-      console.error(`[travelhub] enquiry email failed for ${record.id}:`, err);
+      const reason = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
+      console.error(`[travelhub] enquiry email failed for ${record.id}: ${reason}`);
       return res.status(502).json({
         error: 'Sorry, we couldn’t send your enquiry just now. Please try again, or message us on WhatsApp.',
       });

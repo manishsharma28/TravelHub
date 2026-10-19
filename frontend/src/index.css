@@ -33,6 +33,9 @@
   --color-whatsapp: #25d366;
   --color-gmail: #ea4335;
 
+  /* Shared by real placeholders and by select/date empty states, which have none. */
+  --color-placeholder: #b7c2cc;
+
   --font-display: 'Georgia', 'Times New Roman', serif;
 }
 
@@ -44,14 +47,72 @@ body {
   @apply bg-white text-slate-800 antialiased;
 }
 
-/* One faded, italic placeholder style site-wide (preflight's default is 50% of the text
-   colour). In the base layer so `placeholder:` utilities can still override it. */
+/* One placeholder style site-wide: same family and size as the field, regular weight,
+   italic, and lighter than the text. Preflight colours placeholders at 50% of the text
+   colour, which reads too strong here. Kept in the base layer so a `placeholder:`
+   utility can still override a single field. */
 @layer base {
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+  }
+
   input::placeholder,
   textarea::placeholder {
-    color: var(--color-slate-400);
+    color: var(--color-placeholder);
+    opacity: 1;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 400;
     font-style: italic;
   }
+
+  /* Date fields ignore ::placeholder. Match the other fields' face and size, use the
+     placeholder colour only while empty, and the normal text colour once a date is set. */
+  input[type='date']::-webkit-datetime-edit,
+  input[type='date']::-webkit-datetime-edit-fields-wrapper,
+  input[type='date']::-webkit-datetime-edit-text,
+  input[type='date']::-webkit-datetime-edit-month-field,
+  input[type='date']::-webkit-datetime-edit-day-field,
+  input[type='date']::-webkit-datetime-edit-year-field {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: inherit;
+    padding: 0;
+  }
+
+  /* Firefox paints the empty date with the input colour; hide it behind the stand-in. */
+  input[type='date'].date-empty {
+    color: transparent;
+  }
+
+  input[type='date'].date-empty::-webkit-datetime-edit,
+  input[type='date'].date-empty::-webkit-datetime-edit-text,
+  input[type='date'].date-empty::-webkit-datetime-edit-month-field,
+  input[type='date'].date-empty::-webkit-datetime-edit-day-field,
+  input[type='date'].date-empty::-webkit-datetime-edit-year-field {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* Outside the base layer so it wins over the date control's own colour.
+   A chosen date uses the same dark text as the other fields. */
+input[type='date']:not([value='']) {
+  color: var(--color-slate-800);
+  -webkit-text-fill-color: var(--color-slate-800);
+}
+
+input[type='date']:not([value=''])::-webkit-datetime-edit,
+input[type='date']:not([value=''])::-webkit-datetime-edit-text,
+input[type='date']:not([value=''])::-webkit-datetime-edit-month-field,
+input[type='date']:not([value=''])::-webkit-datetime-edit-day-field,
+input[type='date']:not([value=''])::-webkit-datetime-edit-year-field {
+  color: var(--color-slate-800);
+  -webkit-text-fill-color: var(--color-slate-800);
 }
 
 /* Utility used by hero/card overlays to keep white text legible on photos. */

@@ -7,6 +7,8 @@ interface Props {
   packageId?: string;
   packageTitle?: string;
   compact?: boolean;
+  /** Keep the submit button visible under the fields while the form scrolls. */
+  pinnedSubmit?: boolean;
 }
 
 type Status = 'idle' | 'submitting' | 'success';
@@ -36,8 +38,9 @@ const initialForm = {
   message: '',
 };
 
-export const EnquiryForm = ({ packageId, packageTitle, compact = false }: Props) => {
+export const EnquiryForm = ({ packageId, packageTitle, compact = false, pinnedSubmit = false }: Props) => {
   const [form, setForm] = useState(initialForm);
+  const [dateFocused, setDateFocused] = useState(false);
   const [status, setStatus] = useState<Status>('idle');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
@@ -115,13 +118,13 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false }: Props)
     }`;
 
   // Selects and date inputs have no ::placeholder, so style their empty state to match.
-  const emptyClass = (value: string) => (value ? '' : 'italic text-slate-400');
+  const emptyClass = (value: string) => (value ? '' : 'italic font-normal text-placeholder');
 
   const Error = ({ field }: { field: string }) =>
     fieldErrors[field] ? <p className="mt-1 text-xs text-red-600">{fieldErrors[field]}</p> : null;
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-3.5" noValidate>
+  const fields = (
+    <>
       {packageTitle && (
         <p className="rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-600">
           Enquiring about <span className="font-semibold text-slate-900">{packageTitle}</span>
@@ -132,7 +135,7 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false }: Props)
         <label htmlFor="eq-name" className="mb-1 block text-xs font-medium text-slate-700">
           Full name
         </label>
-        <input id="eq-name" value={form.name} onChange={update('name')} required placeholder="e.g. Rohan Sharma" className={inputClass('name')} />
+        <input id="eq-name" value={form.name} onChange={update('name')} required placeholder="Rohan Sharma" className={inputClass('name')} />
         <Error field="name" />
       </div>
 
@@ -141,14 +144,14 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false }: Props)
           <label htmlFor="eq-email" className="mb-1 block text-xs font-medium text-slate-700">
             Email
           </label>
-          <input id="eq-email" type="email" value={form.email} onChange={update('email')} required placeholder="e.g. rohan@email.com" className={inputClass('email')} />
+          <input id="eq-email" type="email" value={form.email} onChange={update('email')} required placeholder="rohan@email.com" className={inputClass('email')} />
           <Error field="email" />
         </div>
         <div className={compact ? 'mt-3.5' : ''}>
           <label htmlFor="eq-phone" className="mb-1 block text-xs font-medium text-slate-700">
             Phone
           </label>
-          <input id="eq-phone" type="tel" value={form.phone} onChange={update('phone')} required placeholder="e.g. 98765 43210" className={inputClass('phone')} />
+          <input id="eq-phone" type="tel" value={form.phone} onChange={update('phone')} required placeholder="98765 43210" className={inputClass('phone')} />
           <Error field="phone" />
         </div>
       </div>
@@ -190,7 +193,24 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false }: Props)
           <label htmlFor="eq-date" className="mb-1 block text-xs font-medium text-slate-700">
             Travel date
           </label>
-          <input id="eq-date" type="date" value={form.travelDate} onChange={update('travelDate')} className={`${inputClass('travelDate')} ${emptyClass(form.travelDate)}`} />
+          <div className="relative">
+            <input
+              id="eq-date"
+              type="date"
+              value={form.travelDate}
+              onChange={update('travelDate')}
+              onFocus={() => setDateFocused(true)}
+              onBlur={() => setDateFocused(false)}
+              // The native empty date text can't share the placeholder font, so it's
+              // hidden until the field is focused or filled and a matching stand-in is shown.
+              className={`${inputClass('travelDate')} ${form.travelDate || dateFocused ? '' : 'date-empty'}`}
+            />
+            {!form.travelDate && !dateFocused && (
+              <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm font-normal italic text-placeholder">
+                dd-mm-yyyy
+              </span>
+            )}
+          </div>
         </div>
         <div className={compact ? 'mt-3.5' : ''}>
           <label htmlFor="eq-travellers" className="mb-1 block text-xs font-medium text-slate-700">
@@ -205,7 +225,7 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false }: Props)
               max={MAX_TRAVELLERS}
               value={form.travellers}
               onChange={update('travellers')}
-              placeholder="e.g. 2"
+              placeholder="2"
               // Native spinners are tiny and hidden on touch, so they're replaced by the buttons below.
               className={`${inputClass('travellers')} pr-12 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
             />
@@ -238,19 +258,24 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false }: Props)
         <label htmlFor="eq-message" className="mb-1 block text-xs font-medium text-slate-700">
           Message <span className="text-slate-400">(optional)</span>
         </label>
-        <textarea id="eq-message" value={form.message} onChange={update('message')} rows={2} placeholder="e.g. 6-day Spiti road trip in June, 2 adults" className={`${inputClass('message')} resize-none placeholder:text-xs`} />
+        <textarea id="eq-message" value={form.message} onChange={update('message')} rows={2} placeholder="6-day Spiti road trip in June, 2 adults" className={`${inputClass('message')} resize-none`} />
       </div>
 
+    </>
+  );
+
+  return (
+    <form onSubmit={handleSubmit} className={pinnedSubmit ? 'flex min-h-0 flex-1 flex-col' : 'space-y-3.5'} noValidate>
+      {pinnedSubmit ? <div className="-mr-6 min-h-0 flex-1 space-y-3.5 overflow-y-auto pr-1">{fields}</div> : fields}
       {formError && (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+        <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
           {formError}
         </p>
       )}
-
       <button
         type="submit"
         disabled={status === 'submitting'}
-        className="w-full rounded-lg bg-accent-500 px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-accent-600 disabled:cursor-not-allowed disabled:opacity-60"
+        className={`w-full rounded-lg bg-accent-500 px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-accent-600 disabled:cursor-not-allowed disabled:opacity-60 ${pinnedSubmit ? 'mt-4 shrink-0' : ''}`}
       >
         {status === 'submitting' ? 'Sending…' : 'Get Free Quotes'}
       </button>

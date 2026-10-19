@@ -108,6 +108,41 @@ export const WhatsAppIcon = ({ className = base }: IconProps) => (
   </svg>
 );
 
+export const RoadIcon = ({ className = base }: IconProps) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} aria-hidden="true">
+    <path d="M5 16.5v-2.2c0-.6.3-1.1.8-1.4L8.2 11.5h7.6l2.4 1.4c.5.3.8.8.8 1.4v2.2" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8.2 11.5l1.2-3.1c.2-.5.7-.8 1.2-.8h2.8c.5 0 1 .3 1.2.8l1.2 3.1" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="7.4" cy="16.6" r="1.7" />
+    <circle cx="16.6" cy="16.6" r="1.7" />
+  </svg>
+);
+
+export const SnowIcon = ({ className = base }: IconProps) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} aria-hidden="true">
+    <path d="M12 3v18M12 5.2L9.8 3.4M12 5.2l2.2-1.8M12 18.8L9.8 20.6M12 18.8l2.2 1.8" strokeLinecap="round" />
+    <path d="M4.4 7.4l15.2 9.2M6.6 7.6l-2 .8M6.2 9.6l-.6-2.2M17.4 16.4l2-.8M17.8 14.4l.6 2.2" strokeLinecap="round" />
+    <path d="M19.6 7.4L4.4 16.6M17.4 7.6l2 .8M17.8 9.6l.6-2.2M6.6 16.4l-2 .8M6.2 14.4l-.6 2.2" strokeLinecap="round" />
+  </svg>
+);
+
+export const BikeIcon = ({ className = base }: IconProps) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} aria-hidden="true">
+    <circle cx="6.2" cy="16.8" r="2.7" />
+    <circle cx="17.6" cy="16.8" r="2.7" />
+    <path d="M8.8 16.8l2.1-6h4.1l2.6 6" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M10.9 10.8l2.5 6" strokeLinecap="round" />
+    <path d="M13.2 8h2.3" strokeLinecap="round" />
+  </svg>
+);
+
+export const CompassIcon = ({ className = base }: IconProps) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} aria-hidden="true">
+    <circle cx="12" cy="12" r="8.2" />
+    <path d="M14.7 9.3L12.9 13.1 9.3 14.7 11.1 10.9 14.7 9.3z" strokeLinejoin="round" />
+    <path d="M12 4.4v1.5M12 18.1v1.5M4.4 12h1.5M18.1 12h1.5" strokeLinecap="round" />
+  </svg>
+);
+
 export const ChevronIcon = ({ className = base }: IconProps) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
     <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
