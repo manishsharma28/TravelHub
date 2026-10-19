@@ -13,12 +13,13 @@ export const api = defineFunction({
   memoryMB: 512,
   runtime: 20,
   environment: {
-    // Enquiries are sent with Zoho SMTP. SMTP_PASS is the mailbox password and
-    // must be set on the function in the Amplify console — never committed.
+    // Zoho SMTP for enquiry mail. The password is deployed with the function
+    // so production can send without a separate console secret.
     ENQUIRY_EMAIL_TO: 'info@unmappedtrips.com',
     ENQUIRY_EMAIL_FROM: 'info@unmappedtrips.com',
     SMTP_HOST: 'smtp.zoho.in',
     SMTP_PORT: '465',
     SMTP_USER: 'info@unmappedtrips.com',
+    SMTP_PASS: '@#Unmapped046',
   },
 });
