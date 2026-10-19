@@ -134,6 +134,8 @@ export interface EnquiryPayload {
   email: string;
   phone: string;
   packageId?: string;
+  /** Set when the enquiry comes from a hotel page. */
+  hotel?: string;
   destination?: string;
   travelDate?: string;
   travellers?: number;

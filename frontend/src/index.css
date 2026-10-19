@@ -115,6 +115,23 @@ input[type='date']:not([value=''])::-webkit-datetime-edit-year-field {
   -webkit-text-fill-color: var(--color-slate-800);
 }
 
+/* Quote popup scroller. The bar sits on the card edge; the right padding
+   keeps the fields the same distance from that edge as they are from the left. */
+.quote-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+.quote-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.quote-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.quote-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
 /* Utility used by hero/card overlays to keep white text legible on photos. */
 @utility photo-scrim {
   background-image: linear-gradient(
@@ -123,6 +140,14 @@ input[type='date']:not([value=''])::-webkit-datetime-edit-year-field {
     rgb(0 0 0 / 0.35) 45%,
     rgb(0 0 0 / 0.05) 100%
   );
+}
+
+/* Swipeable strips (gallery thumbnails) that scroll without showing a bar. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Instagram's brand gradient, for the footer contact button. */

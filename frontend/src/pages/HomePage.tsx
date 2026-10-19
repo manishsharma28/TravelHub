@@ -2,10 +2,14 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
-import { formatPrice } from '../lib/format';
 import { PackageCard, PackageCardSkeleton } from '../components/PackageCard';
 import { EnquiryForm } from '../components/EnquiryForm';
 import { PinIcon, SearchIcon, ShieldIcon, StarIcon, UsersIcon } from '../components/Icons';
+import { HotelCard } from '../components/HotelCard';
+import { countHotels, HOTELS } from '../lib/hotels';
+
+/** "1 package", "3 packages"; empty for zero so the tile leaves it out. */
+const plural = (count: number, noun: string) => (count ? `${count} ${noun}${count === 1 ? '' : 's'}` : '');
 
 const TRIP_STYLES = ['Shimla & Manali road trips', 'Winter Spiti 4×4 expeditions', 'Spiti bike tours'];
 
@@ -123,51 +127,11 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* Destinations */}
-      <section className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 sm:pt-16 lg:px-8">
-        <div className="flex items-end justify-between gap-4">
-          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Popular destinations</h2>
-          <Link to="/packages" className="shrink-0 text-sm font-semibold text-brand-600 hover:underline">
-            View all →
-          </Link>
-        </div>
-
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {destinations.loading &&
-            Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-56 animate-pulse rounded-xl bg-slate-200" />
-            ))}
-          {destinations.data?.map((destination) => (
-            <Link
-              key={destination.slug}
-              to={`/packages?destination=${encodeURIComponent(destination.name)}`}
-              className="group relative overflow-hidden rounded-xl shadow-sm transition hover:shadow-lg"
-            >
-              <img
-                src={destination.imageUrl}
-                alt={destination.name}
-                loading="lazy"
-                className="h-56 w-full object-cover transition duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 photo-scrim" />
-              <div className="absolute inset-x-0 bottom-0 p-4 text-white">
-                <h3 className="text-lg font-bold">{destination.name}</h3>
-                <p className="mt-0.5 line-clamp-2 text-xs text-slate-200">{destination.blurb}</p>
-                <p className="mt-2 text-xs font-semibold text-accent-300">
-                  {destination.packageCount} package{destination.packageCount === 1 ? '' : 's'} · from{' '}
-                  {formatPrice(destination.startingPrice)}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Featured packages */}
+      {/* Package */}
       <section className="bg-slate-50 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between gap-4">
-            <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Featured packages</h2>
+            <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Package</h2>
             <Link to="/packages" className="shrink-0 text-sm font-semibold text-brand-600 hover:underline">
               All packages →
             </Link>
@@ -181,6 +145,60 @@ export const HomePage = () => {
               </p>
             )}
             {featured.data?.map((pkg) => <PackageCard key={pkg.id} pkg={pkg} />)}
+          </div>
+        </div>
+      </section>
+
+      {/* Hotels */}
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Hotels</h2>
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {HOTELS.map((hotel) => (
+            <HotelCard key={hotel.slug} hotel={hotel} />
+          ))}
+        </div>
+      </section>
+
+      {/* Destinations */}
+      <section className="bg-slate-50 py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-end justify-between gap-4">
+            <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Destinations</h2>
+            <Link to="/packages" className="shrink-0 text-sm font-semibold text-brand-600 hover:underline">
+              View all →
+            </Link>
+          </div>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {destinations.loading &&
+              Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="h-56 animate-pulse rounded-xl bg-slate-200" />
+              ))}
+            {destinations.data?.map((destination) => (
+              <Link
+                key={destination.slug}
+                to={`/packages?destination=${encodeURIComponent(destination.name)}`}
+                className="group relative overflow-hidden rounded-xl shadow-sm transition hover:shadow-lg"
+              >
+                <img
+                  src={destination.imageUrl}
+                  alt={destination.name}
+                  loading="lazy"
+                  className="h-56 w-full object-cover transition duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 photo-scrim" />
+                <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+                  <h3 className="text-lg font-bold">{destination.name}</h3>
+                  <p className="text-[13px] text-accent-500">
+                    {[
+                      plural(destination.packageCount, 'package'),
+                      plural(countHotels(destination.name), 'hotel'),
+                    ]
+                      .filter(Boolean)
+                      .join(', ')}
+                  </p>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

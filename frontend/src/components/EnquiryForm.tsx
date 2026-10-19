@@ -6,6 +6,8 @@ import { CheckIcon, ChevronIcon } from './Icons';
 interface Props {
   packageId?: string;
   packageTitle?: string;
+  /** Hotel name, sent with the enquiry when the form sits on a hotel page. */
+  hotel?: string;
   compact?: boolean;
   /** Keep the submit button visible under the fields while the form scrolls. */
   pinnedSubmit?: boolean;
@@ -38,7 +40,7 @@ const initialForm = {
   message: '',
 };
 
-export const EnquiryForm = ({ packageId, packageTitle, compact = false, pinnedSubmit = false }: Props) => {
+export const EnquiryForm = ({ packageId, packageTitle, hotel, compact = false, pinnedSubmit = false }: Props) => {
   const [form, setForm] = useState(initialForm);
   const [dateFocused, setDateFocused] = useState(false);
   const [status, setStatus] = useState<Status>('idle');
@@ -71,6 +73,7 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false, pinnedSu
       email: form.email,
       phone: form.phone,
       packageId,
+      hotel,
       destination: form.destination || undefined,
       travelDate: form.travelDate || undefined,
       travellers: form.travellers ? Number(form.travellers) : undefined,
@@ -125,9 +128,9 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false, pinnedSu
 
   const fields = (
     <>
-      {packageTitle && (
+      {(packageTitle ?? hotel) && (
         <p className="rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-600">
-          Enquiring about <span className="font-semibold text-slate-900">{packageTitle}</span>
+          Enquiring about <span className="font-semibold text-slate-900">{packageTitle ?? hotel}</span>
         </p>
       )}
 
@@ -156,8 +159,8 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false, pinnedSu
         </div>
       </div>
 
-      {/* A package enquiry already implies its destination. */}
-      {!packageId && (
+      {/* A package or hotel enquiry already implies its destination. */}
+      {!packageId && !hotel && (
         <div>
           <label htmlFor="eq-destination" className="mb-1 block text-xs font-medium text-slate-700">
             Destination
@@ -266,7 +269,7 @@ export const EnquiryForm = ({ packageId, packageTitle, compact = false, pinnedSu
 
   return (
     <form onSubmit={handleSubmit} className={pinnedSubmit ? 'flex min-h-0 flex-1 flex-col' : 'space-y-3.5'} noValidate>
-      {pinnedSubmit ? <div className="-mr-6 min-h-0 flex-1 space-y-3.5 overflow-y-auto pr-1">{fields}</div> : fields}
+      {pinnedSubmit ? <div className="quote-scroll -mr-6 min-h-0 flex-1 space-y-3.5 overflow-y-auto pr-[14px]">{fields}</div> : fields}
       {formError && (
         <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
           {formError}

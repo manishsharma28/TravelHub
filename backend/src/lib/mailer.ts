@@ -32,6 +32,7 @@ export interface EnquiryDetails {
   phone: string;
   destination?: string;
   packageTitle?: string;
+  hotel?: string;
   travelDate?: string;
   travellers?: number;
   message?: string;
@@ -68,6 +69,7 @@ export const sendEnquiryEmail = async (enquiry: EnquiryDetails): Promise<void> =
     ['Phone', enquiry.phone],
     ['Destination', enquiry.destination],
     ['Package', enquiry.packageTitle],
+    ['Hotel', enquiry.hotel],
     ['Travel date', enquiry.travelDate && formatTravelDate(enquiry.travelDate)],
     ['Travellers', enquiry.travellers?.toString()],
     ['Message', enquiry.message],
@@ -75,7 +77,7 @@ export const sendEnquiryEmail = async (enquiry: EnquiryDetails): Promise<void> =
     ['Reference', enquiry.id],
   ];
 
-  const topic = enquiry.packageTitle ?? enquiry.destination;
+  const topic = enquiry.packageTitle ?? enquiry.hotel ?? enquiry.destination;
   const subject = `New enquiry: ${enquiry.name}${topic ? ` — ${topic}` : ''}`.replace(/[\r\n]+/g, ' ');
 
   const text = rows.map(([label, value]) => `${label}: ${value || '—'}`).join('\n');

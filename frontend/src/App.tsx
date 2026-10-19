@@ -6,6 +6,7 @@ import { WhatsAppButton } from './components/WhatsAppButton';
 import { HomePage } from './pages/HomePage';
 import { PackagesPage } from './pages/PackagesPage';
 import { PackageDetailPage } from './pages/PackageDetailPage';
+import { HotelDetailPage } from './pages/HotelDetailPage';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -28,6 +29,7 @@ export const App = () => (
         <Route path="/" element={<HomePage />} />
         <Route path="/packages" element={<PackagesPage />} />
         <Route path="/packages/:slug" element={<PackageDetailPage />} />
+        <Route path="/hotels/:slug" element={<HotelDetailPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="*" element={<NotFoundPage />} />

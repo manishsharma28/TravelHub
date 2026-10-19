@@ -29,7 +29,7 @@ const QuoteDialog = ({ onClose }: { onClose: () => void }) => {
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-56 sm:items-center sm:p-4" role="presentation">
-      <button type="button" className="fixed inset-0 bg-black/10" aria-label="Close quote form" onClick={onClose} />
+      <button type="button" className="fixed inset-0 bg-black/10 backdrop-blur-[1px]" aria-label="Close quote form" onClick={onClose} />
       <div
         role="dialog"
         aria-modal="true"
@@ -77,7 +77,7 @@ export const Header = () => {
           <Logo />
         </Link>
 
-        <nav className="hidden flex-1 items-center gap-1 lg:flex">
+        <nav className="ml-8 hidden items-center gap-1 lg:flex">
           {NAV.map((item) => (
             <NavLink
               key={item.label}
@@ -104,7 +104,7 @@ export const Header = () => {
               type="search"
               value={term}
               onChange={(e) => setTerm(e.target.value)}
-              placeholder="Search"
+              placeholder="Search..."
               aria-label="Search packages"
               className="w-full rounded-full border border-slate-300 py-2 pl-9 pr-3 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/25"
             />
@@ -145,7 +145,7 @@ export const Header = () => {
                 type="search"
                 value={term}
                 onChange={(e) => setTerm(e.target.value)}
-                placeholder="Search"
+                placeholder="Search..."
                 aria-label="Search packages"
                 className="w-full rounded-full border border-slate-300 py-2 pl-9 pr-3 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/25"
               />

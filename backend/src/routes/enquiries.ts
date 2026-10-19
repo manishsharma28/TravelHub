@@ -16,6 +16,7 @@ const enquirySchema = z.object({
     .trim()
     .regex(/^[+]?[\d\s-]{7,15}$/, 'Please enter a valid phone number'),
   packageId: z.string().trim().optional(),
+  hotel: z.string().trim().max(80).optional(),
   destination: z.string().trim().max(80).optional(),
   travelDate: z.string().trim().optional(),
   travellers: z.coerce.number().int().positive().max(50).optional(),
