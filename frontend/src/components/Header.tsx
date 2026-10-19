@@ -28,7 +28,7 @@ const QuoteDialog = ({ onClose }: { onClose: () => void }) => {
   }, [onClose]);
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-56 sm:items-center sm:p-4" role="presentation">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="presentation">
       <button type="button" className="fixed inset-0 bg-black/10 backdrop-blur-[1px]" aria-label="Close quote form" onClick={onClose} />
       <div
         role="dialog"
@@ -114,15 +114,15 @@ export const Header = () => {
         <button
           type="button"
           onClick={() => setQuoteOpen(true)}
-          className="hidden shrink-0 rounded-full bg-accent-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-accent-600 sm:block"
+          className="ml-auto shrink-0 rounded-full bg-accent-500 px-3.5 py-1.5 text-[13px] font-semibold text-white shadow-sm transition hover:bg-accent-600 sm:px-4 sm:py-2 sm:text-sm md:ml-0"
         >
-          Get Free Quote
+          Get <span className="hidden sm:inline">Free </span>Quote
         </button>
 
         <button
           type="button"
           onClick={() => setMenuOpen((open) => !open)}
-          className="ml-auto rounded-md p-2 text-slate-700 hover:bg-slate-100 lg:hidden"
+          className="-ml-2 rounded-md p-2 text-slate-700 hover:bg-slate-100 sm:ml-0 lg:hidden"
           aria-expanded={menuOpen}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
         >
