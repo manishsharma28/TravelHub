@@ -89,7 +89,7 @@ Base path `/api`. Full query support on the listing endpoint.
 values (`?themes=Adventure,Trekking`).
 
 ```bash
-curl "http://localhost:4000/api/packages?themes=Trekking&maxPrice=20000&sort=price-asc"
+curl "http://localhost:4000/api/packages?themes=Adventure&maxPrice=30000&sort=price-asc"
 ```
 
 Facet counts are computed with the facet's own dimension excluded, so selecting one destination

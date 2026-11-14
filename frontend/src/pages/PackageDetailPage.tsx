@@ -125,14 +125,19 @@ export const PackageDetailPage = () => {
                   <PinIcon className="h-4 w-4 text-brand-600" />
                   {pkg.itinerary.map((stop) => `${stop.city} ${stop.nights}N`).join(' · ')}
                 </span>
-                <span className="inline-flex items-center gap-1.5 text-slate-700">
-                  <span className="inline-flex items-center gap-1 rounded bg-brand-600 px-1.5 py-0.5 text-xs font-bold text-white">
-                    {pkg.operator.rating.toFixed(1)}
-                    <StarIcon className="h-3 w-3" />
+                {pkg.operator && (
+                  <span className="inline-flex items-center gap-1.5 text-slate-700">
+                    <span className="inline-flex items-center gap-1 rounded bg-brand-600 px-1.5 py-0.5 text-xs font-bold text-white">
+                      {pkg.operator.rating.toFixed(1)}
+                      <StarIcon className="h-3 w-3" />
+                    </span>
+                    {pkg.operator.name} · {pkg.operator.reviewCount} reviews
                   </span>
-                  {pkg.operator.name} · {pkg.operator.reviewCount} reviews
-                </span>
+                )}
                 <span className="text-slate-700">{pkg.hotelType}</span>
+                {pkg.minGroupSize && (
+                  <span className="text-slate-700">Minimum {pkg.minGroupSize} travellers</span>
+                )}
               </div>
             </div>
 
@@ -229,7 +234,10 @@ export const PackageDetailPage = () => {
                   )}
                 </div>
                 <p className="mt-1 text-3xl font-bold text-slate-900">{formatPrice(pkg.price)}</p>
-                <p className="text-xs text-slate-500">per person, on twin sharing</p>
+                <p className="text-xs text-slate-500">
+                  per {pkg.pricedPer}
+                  {pkg.minGroupSize && ` · minimum ${pkg.minGroupSize} travellers`}
+                </p>
 
                 <div className="mt-5 border-t border-slate-100 pt-5">
                   <h3 className="mb-4 text-base font-bold text-slate-900">Request a callback</h3>

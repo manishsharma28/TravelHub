@@ -70,6 +70,13 @@ export const WalletIcon = ({ className = base }: IconProps) => (
   </svg>
 );
 
+export const BedIcon = ({ className = base }: IconProps) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} aria-hidden="true">
+    <path d="M3 6v13M3 16h18M21 19v-6a3 3 0 00-3-3h-7v6" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="7" cy="12.5" r="1.8" />
+  </svg>
+);
+
 export const UsersIcon = ({ className = base }: IconProps) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} aria-hidden="true">
     <circle cx="9" cy="8" r="3.5" />
@@ -122,16 +129,6 @@ export const SnowIcon = ({ className = base }: IconProps) => (
     <path d="M12 3v18M12 5.2L9.8 3.4M12 5.2l2.2-1.8M12 18.8L9.8 20.6M12 18.8l2.2 1.8" strokeLinecap="round" />
     <path d="M4.4 7.4l15.2 9.2M6.6 7.6l-2 .8M6.2 9.6l-.6-2.2M17.4 16.4l2-.8M17.8 14.4l.6 2.2" strokeLinecap="round" />
     <path d="M19.6 7.4L4.4 16.6M17.4 7.6l2 .8M17.8 9.6l.6-2.2M6.6 16.4l-2 .8M6.2 14.4l-.6 2.2" strokeLinecap="round" />
-  </svg>
-);
-
-export const BikeIcon = ({ className = base }: IconProps) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} aria-hidden="true">
-    <circle cx="6.2" cy="16.8" r="2.7" />
-    <circle cx="17.6" cy="16.8" r="2.7" />
-    <path d="M8.8 16.8l2.1-6h4.1l2.6 6" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M10.9 10.8l2.5 6" strokeLinecap="round" />
-    <path d="M13.2 8h2.3" strokeLinecap="round" />
   </svg>
 );
 

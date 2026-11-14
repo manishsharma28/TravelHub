@@ -26,7 +26,7 @@ const DESTINATION_GROUPS = [
   },
   {
     label: 'Beyond Himachal',
-    places: ['Zanskar', 'Leh–Ladakh', 'Kashmir', 'Uttarakhand', 'Northeast India', 'Nepal', 'Bhutan'],
+    places: ['Zanskar', 'Leh–Ladakh', 'Kashmir', 'Amritsar', 'Uttarakhand', 'Northeast India', 'Nepal', 'Bhutan', 'Goa'],
   },
 ];
 
@@ -138,7 +138,7 @@ export const EnquiryForm = ({ packageId, packageTitle, hotel, compact = false, p
         <label htmlFor="eq-name" className="mb-1 block text-xs font-medium text-slate-700">
           Full name
         </label>
-        <input id="eq-name" value={form.name} onChange={update('name')} required placeholder="Rohan Sharma" className={inputClass('name')} />
+        <input id="eq-name" value={form.name} onChange={update('name')} required placeholder="Rohit Sharma" className={inputClass('name')} />
         <Error field="name" />
       </div>
 

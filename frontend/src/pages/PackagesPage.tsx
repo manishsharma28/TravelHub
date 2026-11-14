@@ -14,7 +14,7 @@ const SORT_LABELS: Array<{ value: SortOption; label: string }> = [
   { value: 'price-desc', label: 'Price: High to Low' },
   { value: 'duration-asc', label: 'Duration: Short to Long' },
   { value: 'duration-desc', label: 'Duration: Long to Short' },
-  { value: 'rating-desc', label: 'Rating' },
+  // 'rating-desc' is still accepted by the API but hidden: no package carries a rating.
 ];
 
 const PAGE_SIZE = 9;
@@ -105,7 +105,7 @@ export const PackagesPage = () => {
     ? `${query.destination} Tour Packages`
     : query.search
       ? `Results for “${query.search}”`
-      : 'Himachal Pradesh Tour Packages';
+      : 'Tour Packages';
 
   const sidebar = (
     <FilterSidebar facets={facets.data} query={query} onChange={applyPatch} onReset={resetFilters} />

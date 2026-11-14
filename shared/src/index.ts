@@ -52,11 +52,17 @@ export interface TravelPackage {
   themes: Theme[];
   budgetCategory: BudgetCategory;
   hotelType: string;
-  operator: Operator;
-  /** Pre-discount price per person, in INR. */
+  /** Third-party operator and its reviews. Absent for trips run in-house, and
+   *  the UI then shows no rating — never fill this with placeholder numbers. */
+  operator?: Operator;
+  /** Pre-discount price in INR, for the unit named by `pricedPer`. */
   basePrice: number;
-  /** Payable price per person, in INR. */
+  /** Payable price in INR, for the unit named by `pricedPer`. */
   price: number;
+  /** What one `price` buys: a seat for one traveller, or a couple's trip. */
+  pricedPer: 'person' | 'couple';
+  /** Smallest group the price applies to, when the trip has one. */
+  minGroupSize?: number;
   discountPercent: number;
   inclusions: string[];
   exclusions: string[];

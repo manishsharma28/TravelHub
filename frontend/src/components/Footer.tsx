@@ -58,7 +58,7 @@ export const Footer = () => (
       </div>
 
       <div className="mt-12 border-t border-slate-800 pt-6 text-xs text-slate-500">
-        <p>© {new Date().getFullYear()} Unmapped Trips. Demo project — packages shown are sample data.</p>
+        <p>© {new Date().getFullYear()} Unmapped Trips.</p>
       </div>
     </div>
   </footer>

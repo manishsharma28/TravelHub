@@ -11,7 +11,7 @@ import { countHotels, HOTELS } from '../lib/hotels';
 /** "1 package", "3 packages"; empty for zero so the tile leaves it out. */
 const plural = (count: number, noun: string) => (count ? `${count} ${noun}${count === 1 ? '' : 's'}` : '');
 
-const TRIP_STYLES = ['Shimla & Manali road trips', 'Winter Spiti 4×4 expeditions', 'Spiti bike tours'];
+const TRIP_STYLES = ['Shimla & Manali road trips', 'Winter Spiti 4×4 expeditions'];
 
 // Each title is split where it should break on phones, so all three wrap to two balanced lines.
 const TRUST = [
@@ -33,7 +33,7 @@ const HeroSearch = () => {
   return (
     <form
       onSubmit={submit}
-      className="mx-auto mt-10 flex w-full max-w-2xl flex-col gap-3 rounded-2xl bg-white/95 p-4 shadow-2xl backdrop-blur sm:flex-row sm:items-end"
+      className="mx-auto mt-10 flex w-full max-w-2xl flex-col gap-2 sm:flex-row sm:items-end"
     >
       <div className="flex-1">
         {/* Visually the placeholder carries the prompt; the label stays for screen readers. */}
@@ -47,14 +47,14 @@ const HeroSearch = () => {
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
             placeholder="Where to?"
-            className="w-full rounded-lg border border-slate-300 py-2.5 pl-9 pr-3 text-sm text-slate-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/25"
+            className="w-full rounded-lg border border-white bg-white py-2.5 pl-9 pr-3 text-sm text-slate-900 shadow-lg outline-none focus:ring-2 focus:ring-accent-400/70"
           />
         </div>
       </div>
 
       <button
         type="submit"
-        className="rounded-lg bg-accent-500 px-7 py-2.5 text-sm font-bold text-white shadow transition hover:bg-accent-600"
+        className="rounded-lg bg-accent-500 px-7 py-2.5 text-sm font-bold text-white shadow-lg transition hover:bg-accent-600"
       >
         Search
       </button>
@@ -66,6 +66,7 @@ export const HomePage = () => {
   const featured = useApi(() => api.getFeatured(), []);
   const destinations = useApi(() => api.getDestinations(), []);
   const testimonials = useApi(() => api.getTestimonials(), []);
+  const hasTestimonials = (testimonials.data?.length ?? 0) > 0;
 
   return (
     <>
@@ -203,36 +204,39 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <h2 className="text-center text-2xl font-bold text-slate-900 sm:text-3xl">
-          What travellers say
-        </h2>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {testimonials.data?.map((item) => (
-            <figure key={item.id} className="flex flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="flex gap-0.5 text-accent-400">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <StarIcon key={i} className="h-4 w-4" filled={i < item.rating} />
-                ))}
-              </div>
-              <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">
-                “{item.comment}”
-              </blockquote>
-              <figcaption className="mt-4 flex items-center gap-3 border-t border-slate-100 pt-4">
-                <img src={item.avatarUrl} alt="" loading="lazy" className="h-10 w-10 rounded-full object-cover" />
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-slate-900">{item.name}</p>
-                  <p className="truncate text-xs text-slate-500">{item.location}</p>
+      {/* Testimonials — shown only once there are real reviews to show. */}
+      {hasTestimonials && (
+        <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          <h2 className="text-center text-2xl font-bold text-slate-900 sm:text-3xl">
+            What travellers say
+          </h2>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {testimonials.data?.map((item) => (
+              <figure key={item.id} className="flex flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div className="flex gap-0.5 text-accent-400">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <StarIcon key={i} className="h-4 w-4" filled={i < item.rating} />
+                  ))}
                 </div>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
+                <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">
+                  “{item.comment}”
+                </blockquote>
+                <figcaption className="mt-4 flex items-center gap-3 border-t border-slate-100 pt-4">
+                  <img src={item.avatarUrl} alt="" loading="lazy" className="h-10 w-10 rounded-full object-cover" />
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-slate-900">{item.name}</p>
+                    <p className="truncate text-xs text-slate-500">{item.location}</p>
+                  </div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
 
-      {/* Enquiry CTA */}
-      <section className="bg-slate-50">
+      {/* Enquiry CTA — alternates with the section above it, which is Destinations
+          (grey) when there are no reviews and the white Testimonials block otherwise. */}
+      <section className={hasTestimonials ? 'bg-slate-50' : 'bg-white'}>
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:px-8">
           <div>
             <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Can’t find the right package?</h2>

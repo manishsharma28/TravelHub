@@ -1,13 +1,12 @@
 import rohitPhoto from '../assets/team/rohit.jpg';
 import surajPhoto from '../assets/team/suraj.jpg';
 import swatiPhoto from '../assets/team/swati.jpg';
-import { BikeIcon, CompassIcon, PhoneIcon, PinIcon, RoadIcon, SnowIcon } from '../components/Icons';
+import { CompassIcon, PhoneIcon, PinIcon, RoadIcon, SnowIcon } from '../components/Icons';
 import { CONTACT, openGmailOnDesktop } from '../lib/contact';
 
 const TRIP_STYLES = [
   { title: 'Road trips', detail: 'Scenic drives through Shimla and Manali', icon: RoadIcon },
   { title: 'Winter Spiti', detail: 'Adventurous 4×4 journeys in the snow', icon: SnowIcon },
-  { title: 'Spiti bike tours', detail: 'The cold desert on two wheels', icon: BikeIcon },
   { title: 'Offbeat escapes', detail: 'Barot, Shanghar, Jibhi and Bir Billing', icon: CompassIcon },
 ];
 
@@ -78,16 +77,15 @@ export const AboutPage = () => (
         </p>
         <p>
           Whether you dream of a scenic road trip through Shimla and Manali, an adventurous 4×4
-          journey through Winter Spiti, a thrilling Spiti bike tour, or an offbeat escape to places
-          like Barot, Shanghar, Jibhi and Bir Billing, we help you experience every destination in
-          its true spirit.
+          journey through Winter Spiti, or an offbeat escape to places like Barot, Shanghar, Jibhi
+          and Bir Billing, we help you experience every destination in its true spirit.
         </p>
         <p className="font-semibold text-brand-800">
           We don’t just plan holidays; we help you discover places that stay in your heart long
           after the journey ends.
         </p>
       </div>
-      <div className="mx-auto mt-12 grid max-w-5xl gap-4 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
+      <div className="mx-auto mt-12 grid max-w-5xl gap-4 px-4 sm:grid-cols-3 sm:px-6 lg:px-8">
         {TRIP_STYLES.map(({ title, detail, icon: Icon }) => (
           <div key={title} className="flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-800 text-accent-400">

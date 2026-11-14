@@ -20,7 +20,7 @@ const matchesSearch = (pkg: TravelPackage, term: string): boolean => {
     pkg.destination,
     pkg.summary,
     pkg.state,
-    pkg.operator.name,
+    pkg.operator?.name ?? '',
     ...pkg.themes,
     ...pkg.itinerary.map((stop) => stop.city),
     ...pkg.highlights,
@@ -74,16 +74,19 @@ const applyFilters = (
     return true;
   });
 
+/** Packages without an operator have no rating and sort as unrated. */
+const rating = (pkg: TravelPackage): number => pkg.operator?.rating ?? 0;
+
 const sorters: Record<SortOption, (a: TravelPackage, b: TravelPackage) => number> = {
   relevance: (a, b) =>
     Number(b.featured) - Number(a.featured) ||
-    b.operator.rating - a.operator.rating ||
+    rating(b) - rating(a) ||
     a.price - b.price,
   'price-asc': (a, b) => a.price - b.price,
   'price-desc': (a, b) => b.price - a.price,
   'duration-asc': (a, b) => a.nights - b.nights,
   'duration-desc': (a, b) => b.nights - a.nights,
-  'rating-desc': (a, b) => b.operator.rating - a.operator.rating,
+  'rating-desc': (a, b) => rating(b) - rating(a),
 };
 
 export const queryPackages = (

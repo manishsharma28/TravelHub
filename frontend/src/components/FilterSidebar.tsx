@@ -93,7 +93,7 @@ export const FilterSidebar = ({ facets, query, onChange, onReset }: Props) => {
         )}
       </div>
 
-      <Section title="Price (per person)">
+      <Section title="Price">
         <div className="space-y-0.5">
           {PRICE_TIERS.map((tier) => (
             <Checkbox
