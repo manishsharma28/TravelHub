@@ -112,6 +112,108 @@ export const PHOTO = {
   zanskar: commons(
     '7/7d/Padum_Zanskar_View_From_Karsha_Oct22_A7C_03984.jpg/1280px-Padum_Zanskar_View_From_Karsha_Oct22_A7C_03984.jpg',
   ),
+
+  // Jibhi, Kasol & Shangarh
+  /** Jibhi waterfall in the village, Tirthan valley. */
+  jibhiWaterfall: commons('2/25/Jibhi_Waterfall%2C_Jibhi%2C_Himachal_Pradesh.jpg/1280px-Jibhi_Waterfall%2C_Jibhi%2C_Himachal_Pradesh.jpg'),
+  /** Sarosar lake and its temple above Jibhi. */
+  jibhiSarosar: commons('c/cf/Jibhi_Sarosar_lake_and_temple_01.jpg/1280px-Jibhi_Sarosar_lake_and_temple_01.jpg'),
+  /** Traditional houses on Jibhi hill. */
+  jibhiHouses: commons('1/1e/Traditional_Houses_on_Jibhi_Hill.jpg/1280px-Traditional_Houses_on_Jibhi_Hill.jpg'),
+  /** The gate to the Jibhi waterfall. */
+  jibhiWaterfallGate: commons('6/68/Jibhi_Waterfall_Gate.jpg/1280px-Jibhi_Waterfall_Gate.jpg'),
+  /** The bridge at Jibhi. */
+  jibhiBridge: commons('5/55/Jibhi_Bridge.jpg/1280px-Jibhi_Bridge.jpg'),
+  /** The Parvati valley above Kasol. */
+  kasolParvati: commons('1/19/Kasol-parvati_valley%2C_himachal_pradesh.jpg/1280px-Kasol-parvati_valley%2C_himachal_pradesh.jpg'),
+  /** Kasol valley. */
+  kasolValley: commons('c/c5/Kasol_Valley.jpg/1280px-Kasol_Valley.jpg'),
+  /** The holy meadow of Shangarh, Sainj valley. */
+  shangarhMeadow: commons('7/7c/The_Holy_Meadow_of_Shangarh%2C_Sainj_Valley.jpg/1280px-The_Holy_Meadow_of_Shangarh%2C_Sainj_Valley.jpg'),
+  /** Shanghchul Mahadev temple, Shangarh. */
+  shanghchulMahadev: commons(
+    'b/bf/0042223_Shanghchul_Mahadev_temple%2C_Shangarh_Himachal_Pradesh_010.jpg/1280px-0042223_Shanghchul_Mahadev_temple%2C_Shangarh_Himachal_Pradesh_010.jpg',
+  ),
+
+  // Bir Billing & Barot
+  /** Paraglider over the takeoff at Bir-Billing. */
+  paraglidingBir: commons(
+    '3/3a/Paragliding_in_Bir-Billing_%2815274%29.jpg/1280px-Paragliding_in_Bir-Billing_%2815274%29.jpg',
+  ),
+  /** The Barot valley. */
+  barotValley: commons('a/aa/View_of_Barot_valley_01.jpg/1280px-View_of_Barot_valley_01.jpg'),
+  /** The Uhl river, downstream from Barot. */
+  uhlDownstream: commons(
+    '3/3e/Downstream_Uhl_Barot_Himachal_Oct20_D72_18713.jpg/1280px-Downstream_Uhl_Barot_Himachal_Oct20_D72_18713.jpg',
+  ),
+  /** The Uhl river at Barot. */
+  uhlRiver: commons('8/88/Uhl_River_at_Barot_Oct_2017_D72_2280.jpg/1280px-Uhl_River_at_Barot_Oct_2017_D72_2280.jpg'),
+  /** Green meadows in the Barot valley. */
+  greenValley: commons('6/61/Green_valley_04.jpg/1280px-Green_valley_04.jpg'),
+  /** The Barot and Uhl rivulet. */
+  barotRivulet: commons('8/8f/Barot_and_%C3%9Chl_Rivulet.jpg/1280px-Barot_and_%C3%9Chl_Rivulet.jpg'),
+
+  // Summer & premium Spiti
+  /** Chandratal, the moon lake in Spiti. */
+  chanderTal: commons('b/b3/Chander_Tal%2C_Spiti%2C_Himachal_Pradesh.jpg/1280px-Chander_Tal%2C_Spiti%2C_Himachal_Pradesh.jpg'),
+  /** Kibber village, Spiti valley. */
+  kibberVillage: commons(
+    '1/1a/Kibber_village%2C_Spiti_valley%2C_Himachal_Pradesh.JPG/1280px-Kibber_village%2C_Spiti_valley%2C_Himachal_Pradesh.JPG',
+  ),
+  /** The Spiti river and valley. */
+  spitiRiverValley: commons('d/dc/View_of_Spiti_river_and_valley.jpg/1280px-View_of_Spiti_river_and_valley.jpg'),
+  /** The climb to Kunzum La, Lahaul & Spiti. */
+  kunzumLa: commons(
+    '2/27/Kunzum_La-18-ascending_from_Spiti-buddhist_shrine-gje.jpg/1280px-Kunzum_La-18-ascending_from_Spiti-buddhist_shrine-gje.jpg',
+  ),
+  /** The Losar–Kunzum road in Spiti. */
+  losarKunzumRoad: commons('2/29/Losar-Kunzum_Road_Jun18_D72_7836.jpg/1280px-Losar-Kunzum_Road_Jun18_D72_7836.jpg'),
+  /** Kunzum Pass between Lahaul and Spiti. */
+  kunzumPass: commons(
+    '4/46/Kunzum_Pass_between_Lahaul_%26_Spiti_28-6-04.jpg/1280px-Kunzum_Pass_between_Lahaul_%26_Spiti_28-6-04.jpg',
+  ),
+
+  // Spiti bike tour
+  /** Road through the Spiti valley. */
+  roadTripSpiti: commons('8/84/Road_Trip_To_Spiti.jpg/1280px-Road_Trip_To_Spiti.jpg'),
+  /** Kibber, a village in Spiti. */
+  kibberHamlet: commons('f/f5/Kibber_-_a_villege_in_spiti.jpg/1280px-Kibber_-_a_villege_in_spiti.jpg'),
+  /** Women hoeing barley in Chicham, Spiti. */
+  barleyChicham: commons(
+    'a/af/Women_Hoeing_Barley_Chicham_Spiti_Jun18_D72_7456.jpg/1280px-Women_Hoeing_Barley_Chicham_Spiti_Jun18_D72_7456.jpg',
+  ),
+
+  // Kinnaur
+  /** The Baspa valley at Sangla. */
+  baspaSangla: commons(
+    'a/ad/Baspa_Valley_at_Sangla%2C_Himachal_Pradesh%2C_India.jpg/1280px-Baspa_Valley_at_Sangla%2C_Himachal_Pradesh%2C_India.jpg',
+  ),
+  /** A traditional Kinnauri house in Sangla. */
+  kinnauriHouse: commons(
+    'd/d2/Traditional_Kinnauri_house%2C_Sangla%2C_Himachal_Pradesh%2C_India.jpg/1280px-Traditional_Kinnauri_house%2C_Sangla%2C_Himachal_Pradesh%2C_India.jpg',
+  ),
+  /** Snow-covered morning in Sangla. */
+  snowyMorningSangla: commons(
+    'c/c3/Snowy_morning_in_Sangla%2C_Himachal_Pradesh%2C_India.jpg/1280px-Snowy_morning_in_Sangla%2C_Himachal_Pradesh%2C_India.jpg',
+  ),
+
+  // Shimla & Manali (3N4D)
+  /** The Mall Road, Shimla. */
+  mallRoad: commons('4/42/Mall_Road%2C_Shimla_2.jpg/1280px-Mall_Road%2C_Shimla_2.jpg'),
+  /** Shimla from above the town. */
+  cityscapeShimla: commons('d/d3/Cityscape_of_Shimla.jpg/1280px-Cityscape_of_Shimla.jpg'),
+  /** Dorje Drak monastery, Panthaghati, Shimla. */
+  dorjeDrak: commons(
+    '0/0a/Dorje_Drak_Monastery%2C_Panthaghati%2C_Shimla%2C_Himachal_Pradesh.jpg/1280px-Dorje_Drak_Monastery%2C_Panthaghati%2C_Shimla%2C_Himachal_Pradesh.jpg',
+  ),
+  /** Hadimba temple, Manali. */
+  hadimbaTemple: commons('8/82/Hadimba_Temple_in_Manali.jpg/1280px-Hadimba_Temple_in_Manali.jpg'),
+  /** Hidimba Devi temple, Dhungri, Manali. */
+  hidimbaDhungri: commons('3/37/Hidimba_Devi_Temple%2C_Dhungri_Manali.jpg/1280px-Hidimba_Devi_Temple%2C_Dhungri_Manali.jpg'),
+  /** Rohtang Pass seen from Manali. */
+  rohtangFromManali: commons(
+    '2/2f/Rohtang_Pass_from_Manali_vrtmrgmpksk_%281237%29.jpg/1280px-Rohtang_Pass_from_Manali_vrtmrgmpksk_%281237%29.jpg',
+  ),
 } as const;
 
 /**
